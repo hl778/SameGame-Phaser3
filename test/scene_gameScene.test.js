@@ -1,13 +1,13 @@
 /**
- * test ../src/scene_gameScene
+ * test ../src/SceneGame
  */
 const expect = require('chai').expect;
 
 import Phaser from 'phaser';
-import Scene_gameScene from '../src/scene_gameScene';
+import SceneGame from '../src/SceneGame';
 
 // initialise with dumb data
-let scene = new Scene_gameScene('gameScene');
+let scene = new SceneGame('gameScene');
 scene.init({});
 scene.colli_tileGroup = [];
 scene.colli_tileGroup.children = [];
@@ -25,7 +25,7 @@ scene.blueprint = [[1,1],[1,1]];
 scene.scene = {};
 scene.scene.switch = (s)=>{};
 
-describe('#scene_gameScene - scores', function() {
+describe('#SceneGame - scores', function() {
     context('getStepScore', function() {
         it('should be int', function() {
             let res = Number.isInteger(scene.getStepScore(5));
@@ -40,7 +40,7 @@ describe('#scene_gameScene - scores', function() {
     })
 })
 
-describe('#scene_gameScene - logic', function() {
+describe('#SceneGame - logic', function() {
     this.timeout(10000);
     context('clickPause', function() {
         it('should store level info', function() {

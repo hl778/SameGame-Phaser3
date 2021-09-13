@@ -33,8 +33,8 @@ export default class MyLoader extends Phaser.Scene {
             myself.progressBar.fillRect(here_x/2,
                 (GAME.scale.gameSize.height*0.2+70)+1, here_x * value*0.6, 3);
         });
-        this.load.on('fileprogress', function (file) {}); // console.log(file.src)
-        this.load.on('complete', function () {}); // when complete
+        // this.load.on('fileprogress', function (file) {});
+        // this.load.on('complete', function () {}); 
 
         this.load.path = "assets/"; // assets path
         // load global packed images
@@ -92,7 +92,6 @@ export default class MyLoader extends Phaser.Scene {
                 myself.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
                     this.scene.stop('loaderScene');
                     this.scene.start("titleScene");
-                    // this.scene.start('tileMapViewScene',{lastLvlScore:0,level:9999});
                 });
             }
         });
