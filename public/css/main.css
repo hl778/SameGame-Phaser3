@@ -1,0 +1,22 @@
+body {
+    background-color: #131313
+}
+
+#theGameContainer {
+    width: 100%;
+    height: 100%
+}
+
+#preloader {
+    position: absolute;
+    width: 22px;
+    height: auto;
+    top: 30%;
+    left: 50%;
+    margin-left: -11px
+}
+
+@font-face {
+    font-family: "advanced_pixel";
+    src: url(../assets/fonts/advanced_pixel-7.ttf);
+}

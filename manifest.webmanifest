@@ -1,0 +1,39 @@
+{
+  "short_name": "SameGame",
+  "name": "SameGame",
+  "icons": [
+    {
+      "src": "/assets/favicon.png",
+      "type": "image/png",
+      "sizes": "64x64 32x32 24x24 16x16"
+    },
+    {
+          "src": "/assets/favicon256.png",
+          "type": "image/png",
+          "sizes": "256x256 128x128"
+    },
+    {
+      "src": "/assets/favicon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#131313",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#FF584B",
+  "description": "SameGame",
+  "screenshots": [
+    {
+      "src": "/assets/screenshot1.png",
+      "type": "image/png",
+      "sizes": "540x960"
+    },
+    {
+      "src": "/assets/screenshot2.png",
+      "type": "image/png",
+      "sizes": "540x960"
+    }
+  ]
+}
