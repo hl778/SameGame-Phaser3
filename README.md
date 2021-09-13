@@ -4,7 +4,7 @@
 
 > #Tile-matching puzzle
 
-A demo Tile-matching web game built using [Phaser 3](https://phaser.io/phaser3). The name **SameGame** is a reference to the game originally release in 1985 by [Kuniaki Moribe](https://en.wikipedia.org/wiki/SameGame).
+A demo tile-matching web game built using [Phaser 3](https://phaser.io/phaser3). The name **SameGame** is a reference to the game originally release in 1985 by [Kuniaki Moribe](https://en.wikipedia.org/wiki/SameGame).
 
 #### [Live Demo](https://hl778.github.io/SameGame-Phaser3/demo/)
 
