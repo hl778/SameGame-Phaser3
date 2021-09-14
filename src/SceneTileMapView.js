@@ -45,7 +45,7 @@ export default class SceneTileMapView extends Phaser.Scene {
                             cur_cell = 0;
                         }
                         cur_cell*=11;
-                        let rgb = SceneTileMapView.#getUniqueColor(cur_cell);
+                        let rgb = SceneTileMapView.getUniqueColor(cur_cell);
                         let color = rgbHex(rgb[0], rgb[1], rgb[2]);
                         color = "0x" + color;
                         myself.add.rectangle(this.game.scale.gameSize.width * 0.02 + myself.tileWidth / 2 + (j * myself.tileWidth),
@@ -90,7 +90,7 @@ export default class SceneTileMapView extends Phaser.Scene {
             let stepChange = 5;
 
             close.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.removeItem("debugTileMapView");
                 localStorage.removeItem("debugTileMapViewRow");
                 localStorage.removeItem("debugTileMapViewCol");
@@ -100,54 +100,54 @@ export default class SceneTileMapView extends Phaser.Scene {
             });
 
             btn_increase_col.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let col = parseInt(localStorage.getItem("debugTileMapViewCol"));
                 col = Math.min(col+stepChange,100);
                 localStorage.setItem("debugTileMapViewCol", col);
-                myself.#restartScene();
+                myself.restartScene();
             });
             btn_decrease_col.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let col = parseInt(localStorage.getItem("debugTileMapViewCol"));
                 col = Math.max(col-stepChange,1);
                 localStorage.setItem("debugTileMapViewCol", col);
-                myself.#restartScene();
+                myself.restartScene();
             });
 
             btn_increase_row.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let row = parseInt(localStorage.getItem("debugTileMapViewRow"));
                 row = Math.min(row+stepChange,100);
                 localStorage.setItem("debugTileMapViewRow", row);
-                myself.#restartScene();
+                myself.restartScene();
             });
             btn_decrease_row.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let row = parseInt(localStorage.getItem("debugTileMapViewRow"));
                 row = Math.max(1,row-stepChange);
                 localStorage.setItem("debugTileMapViewRow", row);
-                myself.#restartScene();
+                myself.restartScene();
             });
 
             btn_increase_types.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let t = parseInt(localStorage.getItem("debugTileMapViewType"));
                 t = Math.min(t+1,99999);
                 localStorage.setItem("debugTileMapViewType", t);
-                myself.#restartScene();
+                myself.restartScene();
             });
             btn_decrease_types.on('pointerdown', () => {
-                myself.#disableBtns();
+                myself.disableBtns();
                 localStorage.setItem("debugTileMapView", "true");
                 let t = parseInt(localStorage.getItem("debugTileMapViewType"));
                 t = Math.max(1,t-1);
                 localStorage.setItem("debugTileMapViewType", t);
-                myself.#restartScene();
+                myself.restartScene();
             });
         });
 
@@ -158,7 +158,7 @@ export default class SceneTileMapView extends Phaser.Scene {
      * @param n
      * @returns {number[]}
      */
-    static #getUniqueColor(n) {
+    static getUniqueColor(n) {
         const rgb = [0, 0, 0];
 
         for (let i = 0; i < 24; i++) {
@@ -169,11 +169,11 @@ export default class SceneTileMapView extends Phaser.Scene {
         return rgb;
     }
 
-    #restartScene() {
+    restartScene() {
         this.scene.start('tileMapViewScene');
     }
 
-    #disableBtns() {
+    disableBtns() {
         for(let button of this.allBtns) {
             button.disableInteractive();
         }
