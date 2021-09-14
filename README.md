@@ -182,7 +182,7 @@ The game can be created without a physics engine. The reason to use it is to cre
 |                          **Source**                          |               **Used on**                |               **Description**               |
 | :----------------------------------------------------------: | :--------------------------------------: | :-----------------------------------------: |
 |             [Freepik](https://www.flaticon.com)              |                 Favicons                 |          Vector icons and stickers          |
-|      [EDIT.COM GENERATOR](https://deathgenerator.com/)       |        Game ending screen content        | Generate classic video game "death" screens |
+|      [Death Generator](https://deathgenerator.com/)       |        Game ending screen content        | Generate classic video game "death" screens |
 |             [Unsplash](https://www.unsplash.com)             |             Background image             |                   Images                    |
 | [Delapouite](https://www.delapouite.com), [Lorc](https://www.lorcblog.blogspot.com), [DarkZaitzev](https://www.darkzaitzev.deviantart.com) |               Tile images                |        Tile images original authors         |
 |             [Pixilart](https://www.pixilart.com)             | Game characters, buttons and side-assets |               Make pixel arts               |
