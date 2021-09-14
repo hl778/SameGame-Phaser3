@@ -13,7 +13,7 @@
     "start": "webpack-dev-server --mode development --open --config webpack/base.js",
     "start:dev": "webpack-dev-server --mode development --open --config webpack/base.js",
     "start:prod": "http-server ./dist",
-    "test": "webpack-dev-server --hot --mode development --open --config webpack/test.js",
+    "test": "mocha --require esm test/helper_generateTilesMap.test.js test/master.test.js",
     "test:web": "webpack-dev-server --hot --mode development --open --config webpack/test.js",
     "test:cli": "mocha --require esm test/helper_generateTilesMap.test.js test/master.test.js"
   },
