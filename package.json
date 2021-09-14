@@ -15,7 +15,7 @@
     "start:prod": "http-server ./dist",
     "test": "nyc --reporter=html --reporter=text mocha --require esm test/helper_generateTilesMap.test.js test/master.test.js",
     "test:web": "webpack-dev-server --hot --mode development --open --config webpack/test.js",
-    "test:cli": "nyc mocha --require esm test/helper_generateTilesMap.test.js test/master.test.js",
+    "test:cli": "nyc --reporter=html --reporter=text mocha --require esm test/helper_generateTilesMap.test.js test/master.test.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
