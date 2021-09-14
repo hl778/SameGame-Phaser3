@@ -44,20 +44,40 @@ export default class SceneShare extends Phaser.Scene {
      */
     initialiseOthers() {
         // background
-        this.builder.buildHTML1();
+        this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html1.png", anchor:[0,0],widthPercentage:1,
+            heightPercentage:1,name:"html1",
+            canClick:false,isVisible:true
+        });
 
         // main image
-        this.inner_share_img = this.builder.buildInnerShareImg();
+        this.inner_share_img = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width*0.5,y:this.game.scale.gameSize.height*0.05,
+            filename:'inner_share_img.png', anchor:[0.5,0],widthPercentage:0.8,name:"inner_share_img",canClick:false,
+            isVisible:true
+        });
 
         // side
-        const html2 = this.builder.buildHTML2();
+        const html2 = this.builder.buildPackTextureAssets({
+            x:0,y:-25,
+            filename:"html2.png", anchor:[0,0],widthPercentage:1,name:"html2",canClick:false,isVisible:true
+        });
         this.assets_animator.dispatchEnterScene(html2); //anim enter
 
         // bottom img
-        this.builder.buildHTML6();
+        this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width+10,y:this.game.scale.gameSize.height-30,
+            filename:'html6.png', anchor:[1,1],widthPercentage:0.5,name:"html6",canClick:false,
+            isVisible:true
+        });
 
         // score texts
-        this.score_txt = this.builder.buildShareScoreTxt();
+        this.score_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.5,y:this.inner_share_img.y+this.inner_share_img.displayHeight+this.game.scale.gameSize.width*0.1,
+            wrapWidth:this.inner_share_img.displayWidth,fontSize:Math.min(this.game.scale.gameSize.width * 0.09, 100),
+            fill:"#ffffff",anchor:[0.5,0],text:"",isVisible:true,name:'share_score_txt'
+        });
         this.assets_animator.dispatchEnterScene(this.score_txt); //anim enter
         // initial score rolling text
         this.scoreTween = this.tweens.addCounter({
@@ -65,9 +85,13 @@ export default class SceneShare extends Phaser.Scene {
             to: this.score,
             duration: 2000,
         });
-
         // btn again
-        this.builder.buildHTML11();
+        const html11 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width*0.5,y:this.game.scale.gameSize.height*0.8,
+            filename:'html11.png', anchor:[0.5,0],widthPercentage:0.5,name:"html11",canClick:true,
+            isVisible:true
+        });
+        html11.on('pointerdown', () => this.clickAgain(html11));
     }
 
 

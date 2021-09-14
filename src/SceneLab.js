@@ -68,24 +68,46 @@ export default class SceneLab extends Phaser.Scene {
 
     initialiseOthers() {
         // background
-        this.builder.buildHTML1();
+        this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html1.png", anchor:[0,0],widthPercentage:1,
+            heightPercentage:1,name:"html1",
+            canClick:false,isVisible:true
+        });
 
         // side
-        const html2 = this.builder.buildHTML2();
+        const html2 = this.builder.buildPackTextureAssets({
+            x:0,y:-25,
+            filename:"html2.png", anchor:[0,0],widthPercentage:1,name:"html2",canClick:false,isVisible:true
+        });
         this.assets_animator.dispatchEnterScene(html2);
 
         // blackboard frame
-        this.builder.buildInner2();
+        this.builder.buildPackTextureAssets({
+            x:0,y:this.game.scale.gameSize.height,
+            filename:"inner2.png", anchor:[0,1],widthPercentage:1,heightPercentage:0.7,name:"inner2",canClick:false,
+            isVisible:true
+        });
 
         // goal texts
-        let target_txt = this.builder.buildTargetTxt();
+        let target_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.5,y:8,
+            wrapWidth:this.game.scale.gameSize.width,fontSize:Math.min(this.game.scale.gameSize.width * 0.1, 30),
+            fill:"#ebecf3",anchor:[0.5,0],text:"GOAL: " + this.currentGoal,isVisible:true,
+            name:'goal'
+        });
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("txt_goal","txt_current_score");
         //anim enter
         this.assets_animator.dispatchEnterScene(target_txt);
 
         // score texts
-        this.current_txt = this.builder.buildCurrentTxt(target_txt.y + target_txt.width * 0.25,"#dc8cf6");
+        this.current_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.5,y:target_txt.y + target_txt.width * 0.25,
+            wrapWidth:this.game.scale.gameSize.width,fontSize:Math.min(this.game.scale.gameSize.width * 0.08, 30),
+            fill:"#dc8cf6",anchor:[0.5,0],text:this.currentScore,isVisible:true,
+            name:'current_score'
+        });
         this.assets_animator.dispatchEnterScene(this.current_txt);//anim enter
         // initial score rolling text
         this.scoreTween = this.tweens.addCounter({
@@ -123,7 +145,12 @@ export default class SceneLab extends Phaser.Scene {
         });
 
         // pause button
-        this.pauseBtn = this.builder.buildPauseBtn();
+        this.pauseBtn = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width-2,y:2,
+            filename:'pause.png', anchor:[1,0],widthPercentage:0.08,name:"pause",canClick:true,
+            isVisible:false
+        });
+        this.pauseBtn.on('pointerdown', () => this.clickPause());
     }
 
     initialiseWalls() {

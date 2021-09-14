@@ -53,17 +53,33 @@ export default class SceneEndingTile extends Phaser.Scene {
      */
     initialiseOthers() {
         // background
-        this.builder.buildHTML1();
+        this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html1.png", anchor:[0,0],widthPercentage:1,
+            heightPercentage:1,name:"html1",
+            canClick:false,isVisible:true
+        });
 
         // side
-        const html2 = this.builder.buildHTML2();
+        const html2 = this.builder.buildPackTextureAssets({
+            x:0,y:-25,
+            filename:"html2.png", anchor:[0,0],widthPercentage:1,name:"html2",canClick:false,isVisible:true
+        });
         this.assets_animator.dispatchEnterScene(html2);
 
         // blackboard frame
-        this.builder.buildInner2();
+        this.builder.buildPackTextureAssets({
+            x:0,y:this.game.scale.gameSize.height,
+            filename:"inner2.png", anchor:[0,1],widthPercentage:1,heightPercentage:0.7,name:"inner2",canClick:false,
+            isVisible:true
+        });
 
         //txt
-        this.end_txt = this.builder.buildEndTxt();
+        this.end_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width*0.1,y:this.game.scale.gameSize.height*0.15,
+            wrapWidth:this.game.scale.gameSize.width*0.8,fontSize:this.game.scale.gameSize.width*0.1,
+            fill:"#ffffff",anchor:[0,0],text:'',isVisible:true,name:''
+        });
         let txt_content = "Tapir:\"I am Tapir.\nThe Camelia Desert is\nfilled with sad aliens.\"";
         setTimeout(() => {
             this.typewriterWithWrapped(txt_content, this.end_txt, 2);
@@ -75,13 +91,21 @@ export default class SceneEndingTile extends Phaser.Scene {
      */
     initialiseWalls() {
         //bottom invisible platform
-        this.platform = this.builder.buildPlatform();
-
+        this.platform = this.builder.buildArcadeSprite({
+            x:this.game.scale.gameSize.width * 0.5,y:this.game.scale.gameSize.height * 0.969,filename:'platform.png',
+            widthPercentage:1,hasGravity:false,height:10,alpha:0,name:"platform"
+        });
         // left wall
-        this.wallLeft = this.builder.buildLeftWall();
+        this.wallLeft = this.builder.buildArcadeSprite({
+            x:0,y:this.game.scale.gameSize.height * 0.65,filename:'wallLeft.png',
+            widthPercentage:0.066,hasGravity:false,height:this.game.scale.gameSize.height * 0.7,alpha:0,name:"wallLeft"
+        });
 
         // right wall
-        this.wallRight = this.builder.buildRightWall();
+        this.wallRight = this.builder.buildArcadeSprite({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.65,filename:'wallRight.png',
+            widthPercentage:0.066,hasGravity:false,height:this.game.scale.gameSize.height * 0.7,alpha:0,name:"wallRight"
+        });
     }
 
     /**

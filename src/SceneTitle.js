@@ -48,68 +48,124 @@ export default class SceneTitle extends Phaser.Scene {
      */
     createAssets() {
         // background
-        const html1 = this.builder.buildHTML1();
+        const html1 = this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html1.png", anchor:[0,0],widthPercentage:1,
+            heightPercentage:1,name:"html1",
+            canClick:false,isVisible:true
+        });
         this.titleScene_group.push(html1);
 
         // red gradient
-        const html9 = this.builder.buildHTML9();
+        const html9 = this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html9.png", anchor:[0,0],widthPercentage:(this.game.scale.gameSize.width - 20)/this.game.scale.gameSize.width,
+            heightPercentage:(this.game.scale.gameSize.height - 20)/this.game.scale.gameSize.height,name:"html9",
+            canClick:false,isVisible:true
+        });
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("html9","html1");
         this.titleScene_group.push(html9);
 
         // frame
-        const html9_1 = this.builder.buildHTML9_1();
+        const html9_1 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width * 0.01,y:0,
+            filename:"html9_1.png", anchor:[0,0],widthPercentage:0.99,heightPercentage:1,name:"html9_1",
+            canClick:false,isVisible:true
+        });
         this.titleScene_group.push(html9_1);
 
         // title
-        this.html3 = this.builder.buildHTML3();
+        this.html3 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width * 0.5,y:20,
+            filename:"html3.png", anchor:[0.5,0],widthPercentage:0.9,name:"html3",canClick:true,isVisible:true
+        });
+        this.html3.on('pointerdown', () => this.clickTitle(this.html3));
         this.titleScene_group.push(this.html3);
 
         // side cloud
-        const html2 = this.builder.buildHTML2();
+        const html2 = this.builder.buildPackTextureAssets({
+            x:0,y:-25,
+            filename:"html2.png", anchor:[0,0],widthPercentage:1,name:"html2",canClick:false,isVisible:true
+        });
         this.titleScene_group.push(html2);
 
         // moon
-        this.html4 = this.builder.buildHTML4();
+        this.html4 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height - this.game.scale.gameSize.width * 0.075,
+            filename:"html4.png", anchor:[1,1],widthPercentage:1,name:"html4",canClick:false,isVisible:true
+        });
         this.titleScene_group.push(this.html4);
 
         // character
-        this.html5 = this.builder.buildHTML5();
+        this.html5 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height + this.game.scale.gameSize.width * 0.105,
+            filename:"html5.png", anchor:[1,1],widthPercentage:0.97,name:"html5",canClick:true,isVisible:true
+        });
+        this.html5.on('pointerdown', () => this.clickChar(this.html5));
         this.titleScene_group.push(this.html5);
 
         // btn code
-        this.html8 = this.builder.buildHTML8();
+        this.html8 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.game.scale.gameSize.height - this.game.scale.gameSize.width * 0.2,filename:"html8.png",
+            anchor:[0,1],widthPercentage:0.35,name:"html8",canClick:true,isVisible:true
+        });
+        this.html8.on('pointerdown', () => this.clickContact());
         this.titleBtn_group.push(this.html8);
         this.titleScene_group.push(this.html8);
 
         // btn credit
-        this.html8credits = this.builder.buildHTML8Credits();
+        this.html8credits = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8.y + this.html8.displayHeight + 20,filename:"html8credits.png",
+            anchor:[0,1],widthPercentage:0.35,name:"html8credits",canClick:true,isVisible:true
+        });
+        this.html8credits.on('pointerdown', () => this.clickCredits());
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("html8credits","html8");
         this.titleBtn_group.push(this.html8credits);
         this.titleScene_group.push(this.html8credits);
 
         // btn debug
-        this.html8Debug = this.builder.buildHTML8Debug();
+        this.html8Debug = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.html8credits.y,filename:"html8Debug.png",
+            anchor:[1,1],widthPercentage:0.4,name:"html8Debug",canClick:true,isVisible:true
+        });
+        this.html8Debug.on('pointerdown', () => this.clickOpenDebug());
         this.titleScene_group.push(this.html8Debug);
 
         // btn debug close
-        this.html8Debug2 = this.builder.buildHTML8Debug2();
+        this.html8Debug2 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.html8credits.y,filename:"html8Debug2.png",
+            anchor:[1,1],widthPercentage:0.4,name:"html8Debug2",canClick:true,isVisible:false
+        });
+        this.html8Debug2.on('pointerdown', () => this.clickCloseDebug());
         this.titleScene_group.push(this.html8Debug2);
 
         // btn start
-        this.html7 = this.builder.buildHTML7();
+        this.html7 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8.y - this.html8.displayHeight - 20,filename:"html7.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html7",canClick:true,isVisible:true
+        });
+        this.html7.on('pointerdown', () => this.clickStart());
         this.titleBtn_group.push(this.html7);
         this.titleScene_group.push(this.html7);
 
         // btn must pass
-        this.html8_2 = this.builder.buildHTML8_2();
+        this.html8_2 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html7.y - this.html7.displayHeight - 5,filename:"html8_2.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_2",canClick:true,isVisible:false
+        });
+        this.html8_2.on('pointerdown', () => this.clickMustPass());
         this.titleBtn_group.push(this.html8_2);
         this.titleScene_group.push(this.html8_2);
         this.titleDebugBtn_group.push(this.html8_2);
 
         // btn scene to ending
-        this.html8_6 = this.builder.buildHTML8_6();
+        this.html8_6 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8_2.y - this.html8_2.displayHeight - 5,filename:"html8_6.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_6",canClick:true,isVisible:false
+        });
+        this.html8_6.on('pointerdown', () => this.clickEnding());// callback
         this.titleBtn_group.push(this.html8_6);
         this.titleScene_group.push(this.html8_6);
         this.titleDebugBtn_group.push(this.html8_6);
@@ -117,7 +173,11 @@ export default class SceneTitle extends Phaser.Scene {
         this.assets_animator.addExitSameAs("html8_6","html8_2");
 
         // btn scene to share
-        this.html8_5 = this.builder.buildHTML8_5();
+        this.html8_5 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8_6.y - this.html8_6.displayHeight - 5,filename:"html8_5.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_5",canClick:true,isVisible:false
+        });
+        this.html8_5.on('pointerdown', () => this.clickShare());
         this.titleBtn_group.push(this.html8_5);
         this.titleScene_group.push(this.html8_5);
         this.titleDebugBtn_group.push(this.html8_5);
@@ -125,7 +185,11 @@ export default class SceneTitle extends Phaser.Scene {
         this.assets_animator.addExitSameAs("html8_5","html8_2");
 
         // btn lab
-        this.html8_3 = this.builder.buildHTML8_3();
+        this.html8_3 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8_5.y - this.html8_5.displayHeight - 5,filename:"html8_3.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_3",canClick:true,isVisible:false
+        });
+        this.html8_3.on('pointerdown', () => this.clickLab());
         this.titleBtn_group.push(this.html8_3);
         this.titleScene_group.push(this.html8_3);
         this.titleDebugBtn_group.push(this.html8_3);
@@ -133,7 +197,11 @@ export default class SceneTitle extends Phaser.Scene {
         this.assets_animator.addExitSameAs("html8_3","html8_2");
 
         // btn scene to debug
-        this.html8_7 = this.builder.buildHTML8_7();
+        this.html8_7 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8_3.y - this.html8_3.displayHeight - 5,filename:"html8_7.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_7",canClick:true,isVisible:false
+        });
+        this.html8_7.on('pointerdown', () => this.clickDebug());
         this.titleBtn_group.push(this.html8_7);
         this.titleScene_group.push(this.html8_7);
         this.titleDebugBtn_group.push(this.html8_7);
@@ -141,7 +209,11 @@ export default class SceneTitle extends Phaser.Scene {
         this.assets_animator.addExitSameAs("html8_7","html8_2");
 
         // btn scene to map viewer
-        this.html8_11 = this.builder.buildHTML8_11();
+        this.html8_11 = this.builder.buildPackTextureAssets({
+            x:0.9,y:this.html8_7.y - this.html8_7.displayHeight - 5,filename:"html8_11.png",
+            anchor:[0,1],widthPercentage:0.55,name:"html8_11",canClick:true,isVisible:false
+        });
+        this.html8_11.on('pointerdown', () => this.clickTileMapViewer());
         this.titleBtn_group.push(this.html8_11);
         this.titleScene_group.push(this.html8_11);
         this.titleDebugBtn_group.push(this.html8_11);

@@ -94,15 +94,27 @@ export default class SceneGame extends Phaser.Scene {
      */
     #initialiseOthers() {
         // background
-        this.builder.buildHTML1();
+        this.builder.buildPackTextureAssets({
+            x:0,y:0,
+            filename:"html1.png", anchor:[0,0],widthPercentage:1,
+            heightPercentage:1,name:"html1",
+            canClick:false,isVisible:true
+        });
 
         // side
-        const html2 = this.builder.buildHTML2();
+        const html2 = this.builder.buildPackTextureAssets({
+            x:0,y:-25,
+            filename:"html2.png", anchor:[0,0],widthPercentage:1,name:"html2",canClick:false,isVisible:true
+        });
         //anim enter
         this.assets_animator.dispatchEnterScene(html2);
 
         // blackboard frame
-        this.inner2 = this.builder.buildInner2();
+        this.inner2 = this.builder.buildPackTextureAssets({
+            x:0,y:this.game.scale.gameSize.height,
+            filename:"inner2.png", anchor:[0,1],widthPercentage:1,heightPercentage:0.7,name:"inner2",canClick:false,
+            isVisible:true
+        });
         //anim enter
         if (this.level === 0) {
             this.assets_animator.dispatchEnterScene(this.inner2);
@@ -122,58 +134,103 @@ export default class SceneGame extends Phaser.Scene {
             current_dialog_y = 0.3;
             current_dialog_w = 0.47;
         }
-        this.inner5 = this.builder.buildInner5(current_dialog, current_dialog_x, current_dialog_y, current_dialog_w);
+        this.inner5 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width * current_dialog_x,y:this.game.scale.gameSize.height * current_dialog_y,
+            filename:current_dialog + '.png', anchor:[0,1],widthPercentage:current_dialog_w,name:"inner5",canClick:false,
+            isVisible:true
+        });
         this.ingame_dialog_group.add(this.inner5);
         this.assets_animator.dispatchEnterScene(this.inner5);
         // initial text tween
         this.ingame_dialig_tween = this.tweens.add({targets: this.inner5});
 
         // text dialog happy
-        this.inner5_2 = this.builder.buildInner5_2();
+        this.inner5_2 = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.06,y:this.game.scale.gameSize.height * 0.28,
+            wrapWidth:this.game.scale.gameSize.width*0.4,fontSize:this.game.scale.gameSize.width*0.09,
+            fill:"#ffffff",anchor:[0,1],text:"JUFFO-WUF FILLS IN MY FIBERS AND I GROW TURGID.",isVisible:false,
+            name:'cleared_five'
+        });
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("txt_cleared_five","txt_passed_third_point");
         this.ingame_dialog_group.add(this.inner5_2);
 
         // text dialog hurry
-        this.inner5_3 = this.builder.buildInner5_3();
+        this.inner5_3 = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.06,y:this.game.scale.gameSize.height * 0.25,
+            wrapWidth:this.game.scale.gameSize.width*0.4,fontSize:this.game.scale.gameSize.width*0.09,
+            fill:"#ffffff",anchor:[0,1],text:"THE EARTH IS DYING, PLANETEERS.",isVisible:false,
+            name:'passed_third_point'
+        });
         this.ingame_dialog_group.add(this.inner5_3);
 
         // text dialog game over
-        this.inner5_5 = this.builder.buildInner5_5();
+        this.inner5_5 = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.06,y:this.game.scale.gameSize.height * 0.29,
+            wrapWidth:this.game.scale.gameSize.width*0.4,fontSize:this.game.scale.gameSize.width*0.09,
+            fill:"#ffffff",anchor:[0,1],text:"YOU'VE OVERE-\nSTIMATED YOUR STRENGTH.",isVisible:false,
+            name:'gameover'
+        });
         this.ingame_dialog_group.add(this.inner5_5);
 
         // all faces group
         this.ingame_face_group = this.add.group();
 
         // character initial face
-        this.inner4 = this.builder.buildInner4();
+        this.inner4 = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.31,
+            filename:'inner4.png', anchor:[1,1],widthPercentage:0.55,name:"inner4",canClick:false,
+            isVisible:true
+        });
         this.ingame_face_group.add(this.inner4);
         this.assets_animator.dispatchEnterScene(this.inner4); //anim enter
 
         // character happy face
-        this.inner5_2_face = this.builder.buildInner5_2Face();
+        this.inner5_2_face = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.31,
+            filename:'inner5_2_face.png', anchor:[1,1],widthPercentage:0.55,name:"inner5_2_face",canClick:false,
+            isVisible:false
+        });
         this.ingame_face_tween = this.tweens.add({targets: this.inner5_2_face});
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("inner5_2_face","inner5_3_face");
         this.ingame_face_group.add(this.inner5_2_face);
 
         // character hurry face
-        this.inner5_3_face = this.builder.buildInner5_3Face();
+        this.inner5_3_face = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.3,
+            filename:'inner5_3_face.png', anchor:[1,1],widthPercentage:0.55,name:"inner5_3_face",canClick:false,
+            isVisible:false
+        });
         this.ingame_face_group.add(this.inner5_3_face);
 
         // character sad face
-        this.inner5_5_face = this.builder.buildInner5_5Face();
+        this.inner5_5_face = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.31,
+            filename:'inner5_5_face.png', anchor:[1,1],widthPercentage:0.55,name:"inner5_5_face",canClick:false,
+            isVisible:false
+        });
         this.ingame_face_group.add(this.inner5_5_face);
 
         // goal texts
-        let target_txt = this.builder.buildTargetTxt();
+        let target_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.5,y:8,
+            wrapWidth:this.game.scale.gameSize.width,fontSize:Math.min(this.game.scale.gameSize.width * 0.08, 30),
+            fill:"#ebecf3",anchor:[0.5,0],text:"GOAL: " + this.currentGoal,isVisible:true,
+            name:'goal'
+        });
         // create an identical animation same as another sprite
         this.assets_animator.addEnterSameAs("txt_goal","txt_current_score");
         //anim enter
         this.assets_animator.dispatchEnterScene(target_txt); //anim enter
 
         // score texts
-        this.current_txt = this.builder.buildCurrentTxt(target_txt.y + target_txt.width * 0.25);
+        this.current_txt = this.builder.buildText({
+            x:this.game.scale.gameSize.width * 0.5,y:target_txt.y + target_txt.width * 0.25,
+            wrapWidth:this.game.scale.gameSize.width,fontSize:Math.min(this.game.scale.gameSize.width * 0.08, 30),
+            fill:"#fd6c3e",anchor:[0.5,0],text:this.currentScore,isVisible:true,
+            name:'current_score'
+        });
         //anim enter
         this.assets_animator.dispatchEnterScene(this.current_txt); //anim enter
         // initial score rolling text
@@ -185,7 +242,12 @@ export default class SceneGame extends Phaser.Scene {
         this.tween_scoreImpactEnlarge = this.tweens.add({targets: this.current_txt});
 
         // pause button
-        this.pauseBtn = this.builder.buildPauseBtn();
+        this.pauseBtn = this.builder.buildPackTextureAssets({
+            x:this.game.scale.gameSize.width-2,y:2,
+            filename:'pause.png', anchor:[1,0],widthPercentage:0.08,name:"pause",canClick:true,
+            isVisible:false
+        });
+        this.pauseBtn.on('pointerdown', () => this.clickPause());
     }
 
     /**
@@ -193,13 +255,22 @@ export default class SceneGame extends Phaser.Scene {
      */
     #initialiseWalls() {
         //bottom invisible platform
-        this.platform = this.builder.buildPlatform();
+        this.platform = this.builder.buildArcadeSprite({
+            x:this.game.scale.gameSize.width * 0.5,y:this.game.scale.gameSize.height * 0.969,filename:'platform.png',
+            widthPercentage:1,hasGravity:false,height:10,alpha:0,name:"platform"
+        });
 
         // left wall
-        this.wallLeft = this.builder.buildLeftWall();
+        this.wallLeft = this.builder.buildArcadeSprite({
+            x:0,y:this.game.scale.gameSize.height * 0.65,filename:'wallLeft.png',
+            widthPercentage:0.066,hasGravity:false,height:this.game.scale.gameSize.height * 0.7,alpha:0,name:"wallLeft"
+        });
 
         // right wall
-        this.wallRight = this.builder.buildRightWall();
+        this.wallRight = this.builder.buildArcadeSprite({
+            x:this.game.scale.gameSize.width,y:this.game.scale.gameSize.height * 0.65,filename:'wallRight.png',
+            widthPercentage:0.066,hasGravity:false,height:this.game.scale.gameSize.height * 0.7,alpha:0,name:"wallRight"
+        });
     }
 
     /**

@@ -455,7 +455,7 @@ export default class AssetsAnimator {
                 return new Promise((res,rej)=>{
                     this.scene.tweens.add({
                         targets: sprite,
-                        duration: 500,
+                        duration: 300,
                         ease: "Elastic",
                         rotation: -0.01,
                         yoyo: false,
@@ -470,7 +470,6 @@ export default class AssetsAnimator {
                                 duration: 1000,
                                 ease: "Power2",
                                 rotation: -1,
-                                delay: 10,
                                 onComplete: () => {
                                     sprite.destroy();
                                     res("last person exited");
