@@ -2,16 +2,10 @@
  * credits scene
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_Credits extends Phaser.Scene {
+
+export default class SceneCredits extends Phaser.Scene {
     constructor(config) {
         super(config);
-    }
-
-    preload() {
-    }
-
-    init() {
-
     }
 
     create() {

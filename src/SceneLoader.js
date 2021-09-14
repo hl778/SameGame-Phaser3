@@ -1,13 +1,13 @@
-import GAME from "./index";
-import rexpixelationpipelineplugin from "./plugins/rexpixelationpipelineplugin.min.js";
 import rexbbcodetextplugin from "./plugins/rexbbcodetextplugin.min.js";
+import rexpixelationpipelineplugin from "./plugins/rexpixelationpipelineplugin.min.js";
 
+import GAME from "./index";
 
 /**
  * Loader
  * Author: hl778 https://github.com/hl778
  */
-export default class MyLoader extends Phaser.Scene {
+export default class SceneLoader extends Phaser.Scene {
     constructor(config) {
         super(config);
     }
@@ -33,20 +33,18 @@ export default class MyLoader extends Phaser.Scene {
             myself.progressBar.fillRect(here_x/2,
                 (GAME.scale.gameSize.height*0.2+70)+1, here_x * value*0.6, 3);
         });
-        // this.load.on('fileprogress', function (file) {});
-        // this.load.on('complete', function () {}); 
 
         this.load.path = "assets/"; // assets path
         // load global packed images
         this.load.multiatlas('pack_texture',"pack_texture.json");
         //physics tile star
         this.load.json("tileAndStarPhysics", "tileAndStarPhysics.json");
-        // mosaic plugin
-        this.load.plugin('rexpixelationpipelineplugin', rexpixelationpipelineplugin, true);
-        // text decorate plugin
-        this.load.plugin('rexbbcodetextplugin', rexbbcodetextplugin, true);
         // credit page image
         this.load.image('creditLogo', 'credit.png');
+        // text decorate plugin
+        this.load.plugin('rexbbcodetextplugin', rexbbcodetextplugin, true);
+        // mosaic plugin
+        this.load.plugin('rexpixelationpipelineplugin', rexpixelationpipelineplugin, true);
         // lab scene sounds
         this.load.audio('popSound', 'popSound.mp3');
         this.load.audio('popSound2', 'popSound2.mp3');
@@ -73,23 +71,17 @@ export default class MyLoader extends Phaser.Scene {
             targets: myself.progressBar,
             ease: 'Sine.easeOut',
             alpha: { start: 1, to: 0 },
-            duration:500,
-            onComplete:(tween, targets)=>{
-                this.tweens.killTweensOf(targets);
-            }
+            duration:500
         });
         this.tweens.add({
             targets: myself.progressBox,
             ease: 'Sine.easeOut',
             alpha: { start: 1, to: 0 },
             duration:200,
-            onComplete:(tween, targets)=>{
-                this.tweens.killTweensOf(targets);
-                myself.progressBar.destroy();
-                myself.progressBox.destroy();
+            onComplete:()=>{
                 // fadeout camera
                 myself.cameras.main.fadeOut(500, 0, 0, 0);
-                myself.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                myself.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                     this.scene.stop('loaderScene');
                     this.scene.start("titleScene");
                 });

@@ -1,6 +1,5 @@
-import _my_settings from "./_globalSettings";
+import _globalSettings from "./_globalSettings";
 import generate_tile from "./helper_generateTilesMap";
-import rexpixelationpipelineplugin from "./plugins/rexpixelationpipelineplugin.min";
 import AssetsBuilder from './assets_builder';
 import AssetsAnimator from "./assets_animator";
 
@@ -8,20 +7,19 @@ import AssetsAnimator from "./assets_animator";
  * the scene after the happy ending, that drops all non-clickable tiles
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_EndingTile extends Phaser.Scene {
+export default class SceneEndingTile extends Phaser.Scene {
     constructor(config) {
         super(config);
     }
 
     preload() {
         // tile map arrangement
-        this.blueprint = generate_tile(_my_settings.rowTiles, _my_settings.colTiles, _my_settings.totalChoices);
+        this.blueprint = generate_tile(_globalSettings.rowTiles, _globalSettings.colTiles, _globalSettings.totalChoices);
     }
 
     init(data) {
         // current score
         this.score = Math.max(data.score, 0);
-        this.pipelinePixelFilters = [];
     }
 
     create() {
@@ -59,7 +57,7 @@ export default class Scene_EndingTile extends Phaser.Scene {
 
         // side
         const html2 = this.builder.buildHTML2();
-        this.assets_animator.dispatchEnterScene(html2)();
+        this.assets_animator.dispatchEnterScene(html2);
 
         // blackboard frame
         this.builder.buildInner2();
@@ -94,7 +92,7 @@ export default class Scene_EndingTile extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.game.scale.gameSize.width, this.game.scale.gameSize.height);
 
         // per tile width
-        this.tileWidth = ((((this.wallRight.x - this.wallRight.displayWidth / 2) - (this.wallLeft.x + this.wallLeft.displayWidth / 2))) / _my_settings.colTiles);
+        this.tileWidth = (((this.wallRight.x - this.wallRight.displayWidth / 2) - (this.wallLeft.x + this.wallLeft.displayWidth / 2)) / _globalSettings.colTiles);
         //arcade set not clash
         this.physics.world.checkCollision.up = false;
         // wall and tiles in different groups
@@ -107,32 +105,10 @@ export default class Scene_EndingTile extends Phaser.Scene {
         this.colli_wallsGroup.add(this.wallRight);
 
         // custom collider on y-axis among tiles
-        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, function (s1, s2) {
-            let b1 = s1.body;
-            let b2 = s2.body;
-
-            if (b1.y > b2.y) {
-                b2.y += (b1.top - b2.bottom);
-                b2.stop();
-            } else {
-                b1.y += (b2.top - b1.bottom);
-                b1.stop();
-            }
-        });
+        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, this.comparatorArcadeCollider);
 
         // custom collider on y among walls and tiles, useful for the bottom platform
-        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, function (s1, s2) {
-            let b1 = s1.body;
-            let b2 = s2.body;
-
-            if (b1.y > b2.y) {
-                b2.y += (b1.top - b2.bottom);
-                b2.stop();
-            } else {
-                b1.y += (b2.top - b1.bottom);
-                b1.stop();
-            }
-        });
+        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, this.comparatorArcadeCollider);
     }
 
     /**
@@ -194,7 +170,7 @@ export default class Scene_EndingTile extends Phaser.Scene {
                     myself.pipelinePixelFilter = postFxPlugin.add(myself.cameras.main);
                     myself.tweens.addCounter({
                         from: 1,
-                        to: _my_settings.endingMosaic,
+                        to: _globalSettings.endingMosaic,
                         duration: 1100,
                         delay: 0,
                         onStart: () => {
@@ -236,5 +212,22 @@ export default class Scene_EndingTile extends Phaser.Scene {
             repeat: Math.floor((length - 1) / step),
             delay: 60,
         });
+    }
+
+    /**
+     * Arcade custom comparator, avoid vertical collapse among sprites
+     * @param s1
+     * @param s2
+     */
+    comparatorArcadeCollider(s1, s2) {
+        let b1 = s1.body;
+        let b2 = s2.body;
+        if (b1.y > b2.y) {
+            b2.y += (b1.top - b2.bottom);
+            b2.stop();
+        } else {
+            b1.y += (b2.top - b1.bottom);
+            b1.stop();
+        }
     }
 }
