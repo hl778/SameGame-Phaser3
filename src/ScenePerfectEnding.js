@@ -4,12 +4,9 @@ import _my_settings from "./_globalSettings";
  * Perfect ending scene
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_PerfectEnding extends Phaser.Scene {
+export default class ScenePerfectEnding extends Phaser.Scene {
     constructor(config) {
         super(config);
-    }
-
-    preload() {
     }
 
     init(data) {

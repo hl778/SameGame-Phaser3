@@ -6,12 +6,9 @@ import AssetsBuilder from "./assets_builder";
  * title scene
  * Author: hl778 https://github.com/hl778
  */
-export default class MyTitle extends Phaser.Scene {
+export default class SceneTitle extends Phaser.Scene {
     constructor(config) {
         super(config);
-    }
-
-    preload() {
     }
 
     init() {

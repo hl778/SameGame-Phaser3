@@ -7,18 +7,18 @@ import "../public/css/main.css";
 import Phaser from 'phaser';
 
 import _my_settings from './_globalSettings';
-import Scene_gameScene from './scene_gameScene';
-import MyTitle from './scene_titleScene';
+import SceneGame from './SceneGame';
+import SceneTitle from './SceneTitle';
 import MyLoader from './scene_loaderScene';
-import Scene_share from './scene_shareScene';
-import Scene_PerfectEnding from './scene_perfectEnding';
+import SceneShare from './SceneShare';
+import ScenePerfectEnding from './ScenePerfectEnding';
 import Scene_Lab from './scene_labScene';
 import Scene_EndingTile from './scene_endingTile';
 import Scene_Debug from './scene_debug';
-import Scene_Paused from './scene_paused';
-import Scene_PausedLab from './scene_pausedLab';
+import ScenePaused from './ScenePaused';
+import ScenePausedLab from './ScenePausedLab';
 import Scene_Credits from './scene_credits';
-import Scene_TileMapView from './scene_tileMapView';
+import SceneTileMapView from './SceneTileMapView';
 
 
 /**
@@ -29,8 +29,8 @@ class MainGame extends Phaser.Game {
         super(config);
         // Add scenes (do not start them yet)
         this.scene.add('loaderScene', MyLoader);
-        this.scene.add('titleScene', MyTitle);
-        this.scene.add("gameScene", new Scene_gameScene({
+        this.scene.add('titleScene', SceneTitle);
+        this.scene.add("gameScene", new SceneGame({
             key: 'gameScene',
             physics: {arcade: {
                     debug: false,
@@ -49,8 +49,8 @@ class MainGame extends Phaser.Game {
                     gravity: { y: 1 }
                 }},
         }));
-        this.scene.add('shareScene', Scene_share);
-        this.scene.add('perfectEndingScene', Scene_PerfectEnding);
+        this.scene.add('shareScene', SceneShare);
+        this.scene.add('perfectEndingScene', ScenePerfectEnding);
         this.scene.add('endingTileScene', new Scene_EndingTile({
             key: 'endingTileScene',
             physics: {arcade: {
@@ -86,9 +86,9 @@ class MainGame extends Phaser.Game {
                 }},
         }));
         this.scene.add('debugScene', new Scene_Debug({key: 'debugScene'}));
-        this.scene.add('tileMapViewScene', Scene_TileMapView);
-        this.scene.add('pausedScene', Scene_Paused);
-        this.scene.add('pausedLabScene', Scene_PausedLab);
+        this.scene.add('tileMapViewScene', SceneTileMapView);
+        this.scene.add('pausedScene', ScenePaused);
+        this.scene.add('pausedLabScene', ScenePausedLab);
         this.scene.add('creditsScene', Scene_Credits);
         // Start the title scene
         this.scene.start('loaderScene');

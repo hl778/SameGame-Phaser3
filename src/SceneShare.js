@@ -5,12 +5,9 @@ import AssetsAnimator from "./assets_animator";
  * Share scene
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_share extends Phaser.Scene {
+export default class SceneShare extends Phaser.Scene {
     constructor(config) {
         super(config);
-    }
-
-    preload() {
     }
 
     init(data) {

@@ -13,6 +13,8 @@ import _my_settings from "./_globalSettings";
  * @returns {Promise<Array.<int[]>>} - promise contains a 2D array contains the arrangement of the tile map (blueprint of the tiles)
  */
 export default function generate_tile(row, col, choice,debug=false) {
+    // not necessary to use promise here,
+    // this is a note for future implementation reference, to make it synchronous
     return new Promise((resolve, reject) => {
         let resulting_arr = [];
         let indicesArr = [];

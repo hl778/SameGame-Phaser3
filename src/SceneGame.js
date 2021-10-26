@@ -7,7 +7,7 @@ import AssetsAnimator from "./assets_animator";
  * Main game scene
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_gameScene extends Phaser.Scene {
+export default class SceneGame extends Phaser.Scene {
     constructor(config) {
         super(config);
     }
@@ -20,7 +20,7 @@ export default class Scene_gameScene extends Phaser.Scene {
             this.blueprint = generate_tile(_my_settings.rowTiles, _my_settings.colTiles, _my_settings.totalChoices);
         } else {
             this.blueprint = JSON.parse(localStorage.getItem("restart_bluePrint"));
-            this.blueprint = new Promise((res,rej)=>{res(this.blueprint)});
+            this.blueprint = Promise.resolve(this.blueprint);
             localStorage.removeItem('restart_bluePrint');
             localStorage.removeItem('restart_level');
             localStorage.removeItem('restart_startScore');
@@ -221,32 +221,10 @@ export default class Scene_gameScene extends Phaser.Scene {
         this.colli_wallsGroup.add(this.wallRight);
 
         // custom collider on y-axis among tiles
-        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, function (s1, s2) {
-            let b1 = s1.body;
-            let b2 = s2.body;
-
-            if (b1.y > b2.y) {
-                b2.y += (b1.top - b2.bottom);
-                b2.stop();
-            } else {
-                b1.y += (b2.top - b1.bottom);
-                b1.stop();
-            }
-        });
+        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, this.comparatorArcadeCollider);
 
         // custom collider on y among walls and tiles, useful for the bottom platform
-        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, function (s1, s2) {
-            let b1 = s1.body;
-            let b2 = s2.body;
-
-            if (b1.y > b2.y) {
-                b2.y += (b1.top - b2.bottom);
-                b2.stop();
-            } else {
-                b1.y += (b2.top - b1.bottom);
-                b1.stop();
-            }
-        });
+        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, this.comparatorArcadeCollider);
     }
 
      initialiseDropTiles() {
@@ -286,11 +264,11 @@ export default class Scene_gameScene extends Phaser.Scene {
                         if (myself.colli_tileGroup.isFull()) {
                             // sort x positions, useful when shifting columns if space
                             myself.initial_x_pos = Array.from(myself.initial_x_pos);
-                            myself.initial_x_pos.sort(myself.ComparatorNumberSort);
+                            myself.initial_x_pos.sort(myself.comparatorNumberSort);
                             resolve("initial tiles generated");
                         }
                     }
-                }, (myself.blueprint.length - 1-i) * 310);
+                }, (myself.blueprint.length - 1-i) * 400);
             }
         });
     }
@@ -303,16 +281,16 @@ export default class Scene_gameScene extends Phaser.Scene {
         let allDroppedCheck = setInterval(() => {
             if (myself.isAllStopped(myself.tileGroup_decreasing)) {
                 clearInterval(allDroppedCheck);
-                myself.pauseBtn.visible = true; // pause btn invisible until all tiles dropped and not tweening
-                // event listener click on each tile
+                // pause btn invisible until all tiles dropped and not tweening
+                myself.pauseBtn.visible = true;
                 let allChildren = myself.colli_tileGroup.getChildren();
                 let left_wall_rightX = myself.wallLeft.getTopRight().x;
                 let bottom_platform_topY = myself.platform.getTopRight().y;
-
+                // event listener click on each tile
                 // loop all children
-                for (let i = 0; i < allChildren.length; i++) {
+                for (const child of allChildren) {
                     // click event
-                    allChildren[i].on('pointerdown', function () {
+                    child.on('pointerdown', function () {
                         let stopped = myself.isAllStopped(myself.tileGroup_decreasing);
                         if (stopped && !myself.isTweening) {
                             // current clicked tile index
@@ -325,83 +303,18 @@ export default class Scene_gameScene extends Phaser.Scene {
                             // if has neighbor of same type, trigger to eliminate tiles
                             if (totalNeighb > 0) {
                                 // reacting animation control
-                                if (totalNeighb > _my_settings.switchCharTrigger - 1) {
-                                    if (myself.passedThirdPoint || myself.colli_tileGroup.maxSize - myself.eliminatedTileCount > myself.colli_tileGroup.maxSize / 3) {
-                                        myself.changeHappyFace();
-                                    }
-                                }
-                                if (!myself.passedThirdPoint && myself.colli_tileGroup.maxSize - myself.eliminatedTileCount <= myself.colli_tileGroup.maxSize / 3) {
-                                    myself.changeHurryFace();
-                                }
-                                // trigger upon empty column
-                                let hasEmptyCol = false;
-                                let emptyColsXPos = []; // store empty columns x positions
+                                myself.changeCharacterFilter(totalNeighb);
                                 // sort neighbours
                                 candidates = Array.from(candidates).sort();
                                 let findIndex = myself.getInsertIndex(candidates, thisIndex);
                                 let to_delete_ind = myself.getDeleteOrder(thisIndex, findIndex, candidates);
-                                let to_delete = []; // tiles to delete
-                                for (let j = 0; j < to_delete_ind.length; j++) {
-                                    to_delete.push(allChildren[to_delete_ind[j]]);
-                                }
-                                let to_delete_copy = Array.from(to_delete);
-                                // delete tiles
-                                for (let k = 0; k < to_delete_ind.length; k++) {
-                                    let delete_index = to_delete_ind[k];
-                                    let delete_tile = allChildren[delete_index];
-                                    // current x position with no small error
-                                    const trueX = myself.getXposKey(delete_tile.x, myself.tilesXPosCount.keys())[1];
-                                    // count at current x position decrease by 1
-                                    // myself.tilesXPosCount[trueX] -= 1;
-                                    myself.tilesXPosCount.set(trueX, myself.tilesXPosCount.get(trueX) - 1);
-                                    // delete tile
-                                    delete_tile.setActive(false).setVisible(false);
-                                    delete_tile.disableBody(true, true);
-                                    myself.tileGroup_decreasing.remove(delete_tile);
-                                    // delete_tile.destroy();
-                                    myself.eliminatedTileCount += 1;
-                                    // check if empty col
-                                    if (myself.tilesXPosCount.get(trueX) === 0) {
-                                        // store empty column x pos
-                                        emptyColsXPos.push(parseFloat(trueX));
-                                        hasEmptyCol = true;
-                                    }
-                                }
-
-                                // rearrange tile array to reflect changes made
-                                myself.shiftRowOnMultipleTile(to_delete_ind, myself.blueprint[0].length, allChildren)
-                                // update x position map count
-                                while (hasEmptyCol) {
-                                    let found = false;
-                                    for (let [key, value] of myself.tilesXPosCount.entries()) {
-                                        if (myself.tilesXPosCount.get(key) === 0) {
-                                            myself.shiftMapLeft(myself.tilesXPosCount, key);
-                                            found = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!found) {
-                                        break;
-                                    }
-                                }
-                                // deletion animation
-                                myself.beforeDeletion(to_delete_copy);
-                                // if empty col
-                                if (hasEmptyCol) {
-                                    // check if need to shift cols
-                                    myself.shiftAllEmptyCol(allChildren, emptyColsXPos);
-                                } else {
-                                    let afterGravity = setInterval(() => {
-                                        // make sure all animation is finished
-                                        if (myself.isAllStopped(myself.tileGroup_decreasing) && !myself.isTweening) {
-                                            clearInterval(afterGravity);
-                                            let deadOrNot = myself.isDeadGame(allChildren);
-                                            if (deadOrNot) { // when no tile can be eliminated
-                                                myself.afterDeadend(myself.tileGroup_decreasing);
-                                            }
-                                        }
-                                    }, 100);
-                                }
+                                // let to_delete = []; // tiles to delete
+                                // for (let index of to_delete_ind) {
+                                //     to_delete.push(allChildren[index]);
+                                // }
+                                // let to_delete_copy = Array.from(to_delete);
+                                // delete tiles and get empty columns x position if any
+                                myself.deleteTiles(to_delete_ind,allChildren);
                             }
                         }
                     });
@@ -410,15 +323,61 @@ export default class Scene_gameScene extends Phaser.Scene {
         }, 100);
     }
 
+    deleteTiles(to_delete_ind,allChildren) {
+        let to_delete_tiles = []; // tiles to delete
+        let emptyColsXPos = []; // store empty columns x positions
+        for (let delete_index of to_delete_ind) {
+            let delete_tile = allChildren[delete_index];
+            to_delete_tiles.push(allChildren[delete_index]);
+            // current x position with no small error
+            const trueX = this.getXposKey(delete_tile.x, this.tilesXPosCount.keys())[1];
+            // count at current x position decrease by 1
+            // myself.tilesXPosCount[trueX] -= 1;
+            this.tilesXPosCount.set(trueX, this.tilesXPosCount.get(trueX) - 1);
+            // delete tile
+            delete_tile.setActive(false).setVisible(false);
+            delete_tile.disableBody(true, true);
+            this.tileGroup_decreasing.remove(delete_tile);
+            this.eliminatedTileCount += 1;
+            // check if empty col
+            if (this.tilesXPosCount.get(trueX) === 0) {
+                // store empty column x pos
+                emptyColsXPos.push(parseFloat(trueX));
+            }
+        }
+        // deletion animation
+        this.beforeDeletion(to_delete_tiles);
+
+        // rearrange tile array to reflect changes made
+        this.shiftRowOnMultipleTile(to_delete_ind, this.blueprint[0].length, allChildren)
+        // update x position map count
+        if(emptyColsXPos.length>0) {
+            this.shiftMapLeft(this.tilesXPosCount);
+            // check if need to shift cols
+            this.shiftAllEmptyCol(allChildren, emptyColsXPos);
+        }else {
+            let afterGravity = setInterval(() => {
+                // make sure all animation is finished
+                if (this.isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
+                    clearInterval(afterGravity);
+                    // when no tile can be eliminated
+                    if (this.isDeadGame(allChildren)) {
+                        this.afterDeadend(this.tileGroup_decreasing);
+                    }
+                }
+            }, 100);
+        }
+    }
+
     /**
      * check if no tile is currently moving
      * @returns {boolean}
-     * @param remainingEntries {group} - non-eliminated tiles group
+     * @param remainingEntries {Phaser.GameObjects.Group} - non-eliminated tiles group
      */
     isAllStopped(remainingEntries) {
         let children = remainingEntries.getChildren();
-        for (let i = 0; i < children.length; i++) {
-            let velo = children[i].body.velocity;
+        for (let child of children) {
+            let velo = child.body.velocity;
             if (velo.x !== 0 || velo.y !== 0) {
                 return false;
             }
@@ -519,8 +478,8 @@ export default class Scene_gameScene extends Phaser.Scene {
      */
     afterDeadend(tileGroup_decreasing) {
         let children = tileGroup_decreasing.getChildren();
-        for (let i = 0; i < children.length; i++) {
-            children[i].disableInteractive();
+        for (let child of children) {
+            child.disableInteractive();
         }
         // happy ending
         if (this.eliminatedTileCount === this.colli_tileGroup.maxSize &&
@@ -709,8 +668,8 @@ export default class Scene_gameScene extends Phaser.Scene {
      */
     shiftRowOnMultipleTile(tile_indices, col_count, arr) {
         let col_summary = {}; // put indices into their column group
-        for (let i = 0; i < tile_indices.length; i++) {
-            let index = tile_indices[i];
+        for (let tile_index of tile_indices) {
+            let index = tile_index;
             let tru_col = index % col_count; // column index
             // summarize tile indices need to be shifted
             if (tru_col in col_summary) {
@@ -720,21 +679,21 @@ export default class Scene_gameScene extends Phaser.Scene {
             }
         }
         // shift each col at a time
-        for (const [key, array] of Object.entries(col_summary)) {
-            array.sort(this.ComparatorNumberSort);
+        for (const array of Object.values(col_summary)) {
+            array.sort(this.comparatorNumberSort);
             let previous_index = array[0] - col_count;
             let minIndex = array[0];
             let drop_count = 0
-            for (let k = 0; k < array.length; k++) {
+            for (let cur_index of array) {
                 // if its the immediate neighbor
-                if (array[k] === previous_index + col_count) {
+                if (cur_index === previous_index + col_count) {
                     this.shiftRowOnSingleTile(minIndex, col_count, arr);
-                    previous_index = array[k];
+                    previous_index = cur_index;
                     drop_count += 1;
                 } else {// if not immediate above neighbor
-                    minIndex = array[k] - drop_count * col_count;
+                    minIndex = cur_index - drop_count * col_count;
                     this.shiftRowOnSingleTile(minIndex, col_count, arr);
-                    previous_index = array[k];
+                    previous_index = cur_index;
                     drop_count = +1;
                 }
             }
@@ -765,7 +724,7 @@ export default class Scene_gameScene extends Phaser.Scene {
             return;
         }
         // sort empty xpos, because we want to start shifting from the right-most empty column
-        emptyColsXPos.sort(myself.ComparatorNumberSort);
+        emptyColsXPos.sort(myself.comparatorNumberSort);
         // get the first right-most col needs to be shifted
         let right_ind = this.initial_x_pos.indexOf(emptyColsXPos[emptyColsXPos.length - 1]) + 1;
         // if it is beyond the last col
@@ -828,28 +787,33 @@ export default class Scene_gameScene extends Phaser.Scene {
     /**
      * shift key-value pair of a map to the left by one position, from a given index
      * @param xMap - original map
-     * @param startKey - start key position
      * @returns {Map} - resulting shifted map
      */
-    shiftMapLeft(xMap, startKey) {
-        let found = false;
-        let previous_key = null;
-        let keys = Array.from(xMap.keys());
-        keys.sort(this.ComparatorNumberSort);
-        // find key position in map, and shift left from there
-        for (let i = 0; i < keys.length; i++) {
-            let cur_differences = Math.abs(keys[i] - startKey);
-            if (cur_differences <= 1 / _my_settings.similarDigits) {
-                found = true;
-                previous_key = keys[i];
-                continue;
+    shiftMapLeft(xMap) {
+        for (let startKey of this.tilesXPosCount.keys()) {
+            if (this.tilesXPosCount.get(startKey) === 0) {
+                let foundXPos = false;
+                let previous_key = null;
+                let keys = Array.from(xMap.keys());
+                keys.sort(this.comparatorNumberSort);
+                // find key position in map, and shift left from there
+                for (let eachKey of keys) {
+                    let cur_differences = Math.abs(eachKey - startKey);
+                    if (cur_differences <= 1 / _my_settings.similarDigits) {
+                        foundXPos = true;
+                        previous_key = eachKey;
+                        continue;
+                    }
+                    if (foundXPos) {
+                        xMap.set(previous_key, xMap.get(eachKey));
+                    }
+                    previous_key = eachKey;
+                }
+                xMap.delete(previous_key);
+                return this.shiftMapLeft(xMap)
             }
-            if (found) {
-                xMap.set(previous_key, xMap.get(keys[i]));
-            }
-            previous_key = keys[i];
         }
-        xMap.delete(previous_key);
+
         return xMap;
     }
 
@@ -886,13 +850,13 @@ export default class Scene_gameScene extends Phaser.Scene {
      */
     getXposKey(trueXpos, initial_x_pos) {
         let xPos_arr = Array.from(initial_x_pos);
-        xPos_arr.sort(this.ComparatorNumberSort);
+        xPos_arr.sort(this.comparatorNumberSort);
         let index = -1;
-        for (let k = 0; k < xPos_arr.length; k++) {
+        for (let xPos of xPos_arr) {
             index += 1;
-            let difference = Math.abs(parseFloat(trueXpos) - parseFloat(xPos_arr[k]));
+            let difference = Math.abs(parseFloat(trueXpos) - parseFloat(xPos));
             if (difference <= 1 / _my_settings.similarDigits) {
-                return [index, xPos_arr[k]];
+                return [index, xPos];
             }
         }
         console.assert(false, {errorMsg: "getXposKey error, did not find x pos."});
@@ -922,7 +886,7 @@ export default class Scene_gameScene extends Phaser.Scene {
         let result = new Set();
         let queue_tile = [tile]; // queue tile of successive neighbors
         let queue_index = [myIndex]; // queue index of corresponding tile
-        initial_x_pos.sort(this.ComparatorNumberSort);
+        initial_x_pos.sort(this.comparatorNumberSort);
 
         while (queue_tile.length !== 0) {
             let current_tile = queue_tile.shift();
@@ -985,7 +949,7 @@ export default class Scene_gameScene extends Phaser.Scene {
     getMinimumNeighbor(tile, myIndex, tilesXPosCount, colCount, entries) {
         let error = 0.00001; // tolerance small error offset
         let xPositions = Array.from(tilesXPosCount.keys());
-        xPositions.sort(this.ComparatorNumberSort);
+        xPositions.sort(this.comparatorNumberSort);
         // check left neighbor
         let distance_to_leftCol = Math.abs(tile.x - parseFloat(xPositions[0]));
         if (distance_to_leftCol > error && // not left-most col
@@ -1051,6 +1015,51 @@ export default class Scene_gameScene extends Phaser.Scene {
             }
         }
         return res;
+    }
+
+    /**
+     * calculate score based on eliminated or remaining tiles
+     * @returns {number}
+     * @param step
+     * @param use{string} - denote whether the score is for award or penalty
+     */
+    getStepScore(step,use="award") {
+        /**
+         * calculate score based on tiles eliminated per step
+         * @type {number}
+         */
+        let singleScore;
+        let stepScore;
+        if(use==="award") {
+            singleScore = _my_settings.singleTileScore;
+            stepScore = _my_settings.tileScoreStepScore;
+        }else{
+            singleScore = _my_settings.tileScorePenaltyInit;
+            stepScore = _my_settings.tileScorePenaltyStep;
+        }
+        let first = singleScore;
+        let last = singleScore + stepScore * step;
+        let res = parseInt((first + last) * (step + 1) / 2, 10);
+        if(use==="award") {
+            return res;
+        }else {
+            return -res;
+        }
+    }
+
+    /**
+     * determine whether to change characters
+     * @param totalNeighb - current neighbors with the same type of tiles
+     */
+    changeCharacterFilter(totalNeighb) {
+        if (totalNeighb > _my_settings.switchCharTrigger - 1) {
+            if (this.passedThirdPoint || this.colli_tileGroup.maxSize - this.eliminatedTileCount > this.colli_tileGroup.maxSize / 3) {
+                this.changeHappyFace();
+            }
+        }
+        if (!this.passedThirdPoint && this.colli_tileGroup.maxSize - this.eliminatedTileCount <= this.colli_tileGroup.maxSize / 3) {
+            this.changeHurryFace();
+        }
     }
 
     /**
@@ -1124,36 +1133,6 @@ export default class Scene_gameScene extends Phaser.Scene {
     }
 
     /**
-     * calculate score based on eliminated or remaining tiles
-     * @returns {number}
-     * @param step
-     * @param use{string} - denote whether the score is for award or penalty
-     */
-    getStepScore(step,use="award") {
-        /**
-         * calculate score based on tiles eliminated per step
-         * @type {number}
-         */
-        let singleScore;
-        let stepScore;
-        if(use==="award") {
-            singleScore = _my_settings.singleTileScore;
-            stepScore = _my_settings.tileScoreStepScore;
-        }else{
-            singleScore = _my_settings.tileScorePenaltyInit;
-            stepScore = _my_settings.tileScorePenaltyStep;
-        }
-        let first = singleScore;
-        let last = singleScore + stepScore * step;
-        let res = parseInt((first + last) * (step + 1) / 2, 10);
-        if(use==="award") {
-            return res;
-        }else {
-            return -res;
-        }
-    }
-
-    /**
      * click on pause
      */
     clickPause() {
@@ -1171,8 +1150,25 @@ export default class Scene_gameScene extends Phaser.Scene {
      * @param b
      * @returns {number}
      */
-    ComparatorNumberSort (a, b) {
+    comparatorNumberSort (a, b) {
         return a - b;
+    }
+
+    /**
+     * Arcade custom comparator, avoid vertical collapse among sprites
+     * @param s1
+     * @param s2
+     */
+    comparatorArcadeCollider(s1, s2) {
+        let b1 = s1.body;
+        let b2 = s2.body;
+        if (b1.y > b2.y) {
+            b2.y += (b1.top - b2.bottom);
+            b2.stop();
+        } else {
+            b1.y += (b2.top - b1.bottom);
+            b1.stop();
+        }
     }
 
 }

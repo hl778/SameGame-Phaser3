@@ -6,12 +6,12 @@ import generate_tile from "./helper_generateTilesMap";
  * tile map view. unfinished
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_TileMapView extends Phaser.Scene {
+export default class SceneTileMapView extends Phaser.Scene {
     constructor(config) {
         super(config);
     }
 
-    preload() {
+    create() {
         if (localStorage.getItem("debugTileMapView") === null) {
             localStorage.setItem("debugTileMapViewCol", "10");
             localStorage.setItem("debugTileMapViewRow", "10");
@@ -23,17 +23,10 @@ export default class Scene_TileMapView extends Phaser.Scene {
             let type = parseInt(localStorage.getItem("debugTileMapViewType"));
             this.blueprint = generate_tile(row, col, type, true);
         }
-    }
-
-    init() {
-    }
-
-    create() {
         let myself = this;
         this.allBtns = [];
         this.blueprint.then((result) => {
             this.blueprint = result;
-            let to_set = new Set(this.blueprint.join(',').split(','));
             // tile width
             let tileWidthOnCol = (this.game.scale.gameSize.width * 0.99 - this.game.scale.gameSize.width * 0.02) / this.blueprint[0].length;
             let tileWidthOnRow = (this.game.scale.gameSize.height * 0.99 - this.game.scale.gameSize.height * 0.3) / this.blueprint.length;
@@ -44,12 +37,18 @@ export default class Scene_TileMapView extends Phaser.Scene {
                 setTimeout(() => {
                     // each row
                     for (let j = 0; j < myself.blueprint[0].length; j++) {
-                        let cur_cell = myself.blueprint[i][j];
+                        let cur_cell;
+                        try{ // avoid when too many tiles that causes slow index reading
+                            // may because the index i traverses from last to first
+                            cur_cell = myself.blueprint[i][j];
+                        } catch (e) {
+                            cur_cell = 0;
+                        }
                         cur_cell*=11;
                         let rgb = myself.getUniqueColor(cur_cell);
                         let color = rgbHex(rgb[0], rgb[1], rgb[2]);
                         color = "0x" + color;
-                        let tile = myself.add.rectangle(this.game.scale.gameSize.width * 0.02 + myself.tileWidth / 2 + (j * myself.tileWidth),
+                        myself.add.rectangle(this.game.scale.gameSize.width * 0.02 + myself.tileWidth / 2 + (j * myself.tileWidth),
                             this.game.scale.gameSize.height * 0.98 - myself.tileWidth / 2 - i * myself.tileWidth, myself.tileWidth, myself.tileWidth,
                             color).setInteractive();
                     }
@@ -154,12 +153,6 @@ export default class Scene_TileMapView extends Phaser.Scene {
 
     }
 
-    update() {
-        if(!Array.isArray(this.blueprint)) {
-
-        }
-    }
-
     /**
      * get unique rgb color given a key n
      * @param n
@@ -181,8 +174,8 @@ export default class Scene_TileMapView extends Phaser.Scene {
     }
 
     disableBtns() {
-        for(let i=0;i<this.allBtns.length;i++) {
-            this.allBtns[i].disableInteractive();
+        for(let button of this.allBtns) {
+            button.disableInteractive();
         }
     }
 
