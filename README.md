@@ -202,6 +202,6 @@ This project is licensed under the terms of the **[MIT](https://choosealicense.c
 </p>
 
 
-<p align = "center" style="color:grey;font-size:3px">
+<p align = "center" >
 Logo generated from <a href="https://www.game-icons.net">game-icons</a> under <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>
 </p>
