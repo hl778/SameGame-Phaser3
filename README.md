@@ -24,15 +24,15 @@ A demo Tile-matching web game built using [Phaser 3](https://phaser.io/phaser3).
   * [Developing](#developing)
     + [Building](#building)
     + [Testing](#testing)
-- [Code Logic](#code-logic)
+  * [Code Logic](#code-logic)
     + [Generating Tile Map](#generating-tile-map)
     + [Shifting Columns](#shifting-columns)
     + [Locating Adjacent Tiles](#locating-adjacent-tiles)
     + [About Arcade Physics engine](#about-arcade-physics-engine)
-- [Tech Stack](#tech-stack)
-- [Credits](#credits)
-- [Contact](#contact)
-- [License](#license)
+  * [Tech Stack](#tech-stack)
+  * [Credits](#credits)
+  * [Contact](#contact)
+  * [License](#license)
 <!--te-->
 
 
