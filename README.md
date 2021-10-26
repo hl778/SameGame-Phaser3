@@ -57,9 +57,9 @@ npm run start
 
 * :iphone: Cross-platform. The game and assets scale is auto-adjusted based on screen size and pixel aspect ratio.
 * :wrench: Can change game settings. Such as the number of tiles and tile types, score and difficulty.
-* Test buttons lead to the different game ending scenes.
+* :crystal_ball: Test buttons lead to the different game ending scenes.
 * :microscope: A lab scene as a playground to experiment with new ideas.
-* Tiles implemented using Phaser [Arcade Physics](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html) engine.
+* :magnet: Tiles implemented using Phaser [Arcade Physics](https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.ArcadePhysics.html) engine.
 
 ## Gameplay 
 
