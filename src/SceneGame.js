@@ -357,7 +357,7 @@ export default class SceneGame extends Phaser.Scene {
     addTileClickEvent() {
         let myself = this;
         let allDroppedCheck = setInterval(() => {
-            if (SceneGame.#isAllStopped(myself.tileGroup_decreasing)) {
+            if (SceneGame.isAllStopped(myself.tileGroup_decreasing)) {
                 clearInterval(allDroppedCheck);
                 // pause btn invisible until all tiles dropped and not tweening
                 myself.pauseBtn.visible = true;
@@ -369,7 +369,7 @@ export default class SceneGame extends Phaser.Scene {
                 for (const child of allChildren) {
                     // click event
                     child.on('pointerdown', function () {
-                        let stopped = SceneGame.#isAllStopped(myself.tileGroup_decreasing);
+                        let stopped = SceneGame.isAllStopped(myself.tileGroup_decreasing);
                         if (stopped && !myself.isTweening) {
                             // current clicked tile index
                             // let thisIndex = myself.colli_tileGroup.children.entries.findIndex(x => x.frame.name === this.frame.name && x.x === this.x && x.y === this.y);
@@ -387,7 +387,7 @@ export default class SceneGame extends Phaser.Scene {
                                 let findIndex = SceneGame.#getInsertIndex(candidates, thisIndex);
                                 let to_delete_ind = SceneGame.#getDeleteOrder(thisIndex, findIndex, candidates);
                                 // delete tiles and get empty columns x position if any
-                                myself.#deleteTiles(to_delete_ind,allChildren);
+                                myself.deleteTiles(to_delete_ind,allChildren);
                             }
                         }
                     });
@@ -396,7 +396,7 @@ export default class SceneGame extends Phaser.Scene {
         }, 100);
     }
 
-    #deleteTiles(to_delete_ind,allChildren) {
+    deleteTiles(to_delete_ind,allChildren) {
         let to_delete_tiles = []; // tiles to delete
         let emptyColsXPos = []; // store empty columns x positions
         for (let delete_index of to_delete_ind) {
@@ -431,7 +431,7 @@ export default class SceneGame extends Phaser.Scene {
         }else {
             let afterGravity = setInterval(() => {
                 // make sure all animation is finished
-                if (SceneGame.#isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
+                if (SceneGame.isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
                     clearInterval(afterGravity);
                     // when no tile can be eliminated
                     if (this.#isDeadGame(allChildren)) {
@@ -447,7 +447,7 @@ export default class SceneGame extends Phaser.Scene {
      * @returns {boolean}
      * @param remainingEntries {Phaser.GameObjects.Group} - non-eliminated tiles group
      */
-    static #isAllStopped(remainingEntries) {
+    static isAllStopped(remainingEntries) {
         let children = remainingEntries.getChildren();
         for (let child of children) {
             let velo = child.body.velocity;
@@ -502,7 +502,7 @@ export default class SceneGame extends Phaser.Scene {
         this.pauseBtn.visible = false;
         this.#changeSadFace();
         let allStoppedCheck = setInterval(() => {
-            let stopped = SceneGame.#isAllStopped(tileGroup_decreasing);
+            let stopped = SceneGame.isAllStopped(tileGroup_decreasing);
             if (stopped && !myself.isTweening) {
                 clearInterval(allStoppedCheck);
                 let promise_finished = myself.#beforeNotPass(tileGroup_decreasing);
@@ -525,7 +525,7 @@ export default class SceneGame extends Phaser.Scene {
         this.pauseBtn.visible = false;
         let myself = this;
         let allStoppedCheck = setInterval(() => {
-            let stopped = SceneGame.#isAllStopped(tileGroup_decreasing);
+            let stopped = SceneGame.isAllStopped(tileGroup_decreasing);
             if (stopped && !myself.isTweening) {
                 clearInterval(allStoppedCheck);
                 let promise_finished = myself.#beforeNextLvl(tileGroup_decreasing);
@@ -786,7 +786,7 @@ export default class SceneGame extends Phaser.Scene {
         if (emptyColsXPos.length === 0) {
             let afterGravity = setInterval(() => {
                 // make sure all animation is finished
-                if (SceneGame.#isAllStopped(myself.tileGroup_decreasing)) {
+                if (SceneGame.isAllStopped(myself.tileGroup_decreasing)) {
                     myself.isTweening = false;
                     clearInterval(afterGravity);
                     let deadOrNot = myself.#isDeadGame(allEntries);
@@ -1210,7 +1210,7 @@ export default class SceneGame extends Phaser.Scene {
      * click on pause
      */
     clickPause() {
-        if (SceneGame.#isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
+        if (SceneGame.isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
             localStorage.setItem("restart_bluePrint", JSON.stringify(this.blueprint));
             localStorage.setItem("restart_level", this.level);
             localStorage.setItem("restart_startScore", this.fixedStartingScore);
