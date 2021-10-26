@@ -58,4 +58,69 @@ describe('#SceneGame - logic', function() {
             expect("restart_startScore" in localStorage).to.equal(true);
         })
     })
+    context('findXposKey', function() {
+        it('should return the most similar key', function() {
+            let res = SceneGame.getXposKey(1.50000001999,
+                [1.50000002,20.50000002]);
+            expect(res).to.eql([0,1.50000002]);
+        })
+    })
+
+    context('extractOneCol', function() {
+        it('should get one column', function() {
+            let allTiles = [{x:1.50000002},{x:20.50000002},{x:1.50000002},{x:20.50000002}];
+            let xpos = 1.50000002;
+            scene.initial_x_pos = [1.50000002,20.50000002];
+            let res = scene.getOneCol(allTiles, xpos);
+            expect(res).to.eql([{x:1.50000002},{x:1.50000002}]);
+        })
+    })
+
+    context('extractOneCol', function() {
+        it('should get another column', function() {
+            let allTiles = [{x:1.50000002},{x:20.50000002},{x:1.50000002},{x:20.50000002}];
+            let xpos = 20.50000002;
+            scene.initial_x_pos = [1.50000002,20.50000002];
+            let res = scene.getOneCol(allTiles, xpos);
+            expect(res).to.eql([{x:20.50000002},{x:20.50000002}]);
+        })
+    })
+
+    context('checkAllStopped', function() {
+        it('should return true', function() {
+            let res = SceneGame.isAllStopped(scene.tileGroup_decreasing);
+            expect(res).to.equal(true);
+        })
+    })
+
+    context('checkAllStopped', function() {
+        it('should return false', function() {
+            let group = {
+                getChildren:()=>{
+                    return [{body:{velocity:{x:15}}}];
+                }};
+            let res = SceneGame.isAllStopped(group);
+            expect(res).to.equal(false);
+        })
+    })
+
+    context('arrangeDeleteOrder', function() {
+        it('should return array with position sorted', function() {
+            let toInsert = 7;
+            let position = 2;
+            let arr = [3,5,8,40];
+            let res = SceneGame.getDeleteOrder(toInsert, position, arr);
+            expect(res).to.eql([7,5,3,8,40]);
+        })
+    })
+
+    context('findInsertIndex', function() {
+        it('should return insertion index', function() {
+            let arr = [3,5,8,40];
+            let val = 6
+            let res = SceneGame.getInsertIndex(arr, val);
+            expect(res).to.equal(2);
+        })
+    })
+
 })

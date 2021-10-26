@@ -859,7 +859,7 @@ export default class SceneGame extends Phaser.Scene {
     }
 
     /**
-     * shift key-value pair of a map to the left by one position, from a given index
+     * shift key-value pair of a map to the left by one position, from the most left empty column
      * @param xMap - original map
      * @returns {Map} - resulting shifted map
      */
