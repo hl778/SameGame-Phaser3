@@ -28,12 +28,12 @@
     {
       "src": "/assets/screenshot1.png",
       "type": "image/png",
-      "sizes": "540x960"
+      "sizes": "552x981"
     },
     {
       "src": "/assets/screenshot2.png",
       "type": "image/png",
-      "sizes": "540x960"
+      "sizes": "552x981"
     }
   ]
 }
