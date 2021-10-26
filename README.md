@@ -1,7 +1,8 @@
 ## A Phaser 3 SameGame
 
-<img src="https://img.shields.io/github/license/hl778/SameGame-Phaser3" alt="badge" style="zoom:100%;"/> [![Known Vulnerabilities](https://snyk.io/test/github/hl778/SameGame-Phaser3/badge.svg)](https://snyk.io/test/github/hl778/SameGame-Phaser3) [![Build Status](https://app.travis-ci.com/hl778/SameGame-Phaser3.svg?branch=main)](https://app.travis-ci.com/hl778/SameGame-Phaser3) [![Coverage Status](https://coveralls.io/repos/github/hl778/SameGame-Phaser3/badge.svg?branch=main)](https://coveralls.io/github/hl778/SameGame-Phaser3?branch=main) [![Maintainability](https://api.codeclimate.com/v1/badges/88732de2e7196bf0cad5/maintainability)](https://codeclimate.com/github/hl778/SameGame-Phaser3/maintainability) 
-<!-- <img src="https://david-dm.org/hl778/SameGame-Phaser3.svg" alt="badge" style="zoom:100%;"/> -->
+<img src="https://img.shields.io/github/license/hl778/SameGame-Phaser3" alt="badge" style="zoom:100%;"/> [![Known Vulnerabilities](https://snyk.io/test/github/hl778/SameGame-Phaser3/badge.svg)](https://snyk.io/test/github/hl778/SameGame-Phaser3) [![Build Status](https://app.travis-ci.com/hl778/SameGame-Phaser3.svg?branch=main)](https://app.travis-ci.com/hl778/SameGame-Phaser3) [![Coverage Status](https://coveralls.io/repos/github/hl778/SameGame-Phaser3/badge.svg?branch=main)](https://coveralls.io/github/hl778/SameGame-Phaser3?branch=main) [![Maintainability](https://api.codeclimate.com/v1/badges/88732de2e7196bf0cad5/maintainability)](https://codeclimate.com/github/hl778/SameGame-Phaser3/maintainability) <img src="https://img.shields.io/david/hl778/SameGame-Phaser3" alt="badge" style="zoom:100%;"/> <img src="https://img.shields.io/david/dev/hl778/SameGame-Phaser3" alt="badge" style="zoom:100%;"/>
+
+
 
 <img src="https://img.shields.io/badge/PRs-welcome-F17C67" alt="badge" style="zoom:100%;"/>
 
