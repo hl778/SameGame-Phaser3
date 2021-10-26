@@ -115,7 +115,7 @@ export default class SceneLab extends Phaser.Scene {
                 text.y = Phaser.Math.Clamp(text.y, -50, 40);
             }
         });
-        
+
         // goal texts
         let target_txt = this.builder.buildText({
             x:this.game.scale.gameSize.width * 0.5,y:8,
