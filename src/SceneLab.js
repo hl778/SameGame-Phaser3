@@ -89,6 +89,33 @@ export default class SceneLab extends Phaser.Scene {
             isVisible:true
         });
 
+        let content = [
+            "Test scroll text.",
+            "KIRK,SPOCK,McCOY ARE FREED. THEY COME TO LEARN SYBOK'S",
+            "REAL MISSION,AND DICIDE TO",
+            "TRAVEL TO THE CREATION",
+            "PLANET.",
+            "",
+        ];
+        let graphics = this.add.graphics();
+        graphics.fillRect(0, 20, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.25);
+        let mask = new Phaser.Display.Masks.GeometryMask(this, graphics);
+        let text = this.add.text(0, 30, content, {
+            color: '#afbda9',
+            wordWrap: {width: this.game.scale.gameSize.width-5}
+        }).setOrigin(0);
+        text.style.fontFamily = "advanced_pixel";
+        text.setFontSize(this.game.scale.gameSize.width*0.09);
+        text.setMask(mask);
+        //  The rectangle they can 'drag' within
+        let zone = this.add.zone(0, 30, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.25).setOrigin(0).setInteractive();
+        zone.on('pointermove', function (pointer) {
+            if (pointer.isDown) {
+                text.y += (pointer.velocity.y / 20);
+                text.y = Phaser.Math.Clamp(text.y, -50, 40);
+            }
+        });
+        
         // goal texts
         let target_txt = this.builder.buildText({
             x:this.game.scale.gameSize.width * 0.5,y:8,
@@ -116,33 +143,6 @@ export default class SceneLab extends Phaser.Scene {
             duration: _globalSettings.rollingTxtDuration,
         });
         this.tween_scoreImpactEnlarge = this.tweens.add({targets: this.current_txt});
-
-        let content = [
-            "Test scroll text.",
-            "KIRK,SPOCK,McCOY ARE FREED. THEY COME TO LEARN SYBOK'S",
-            "REAL MISSION,AND DICIDE TO",
-            "TRAVEL TO THE CREATION",
-            "PLANET.",
-            "",
-        ];
-        let graphics = this.add.graphics();
-        graphics.fillRect(0, 20, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.25);
-        let mask = new Phaser.Display.Masks.GeometryMask(this, graphics);
-        let text = this.add.text(0, 30, content, {
-            color: '#afbda9',
-            wordWrap: {width: this.game.scale.gameSize.width-5}
-        }).setOrigin(0);
-        text.style.fontFamily = "advanced_pixel";
-        text.setFontSize(this.game.scale.gameSize.width*0.09);
-        text.setMask(mask);
-        //  The rectangle they can 'drag' within
-        let zone = this.add.zone(0, 30, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.25).setOrigin(0).setInteractive();
-        zone.on('pointermove', function (pointer) {
-            if (pointer.isDown) {
-                text.y += (pointer.velocity.y / 20);
-                text.y = Phaser.Math.Clamp(text.y, -50, 40);
-            }
-        });
 
         // pause button
         this.pauseBtn = this.builder.buildPackTextureAssets({
