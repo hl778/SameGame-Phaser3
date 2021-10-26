@@ -78,10 +78,7 @@ npm run start
 
 ## Developing
 
-To develop the app, fork `main` branch and then:
-
 ```shell
-git clone https://github.com/{your-repository}/SameGame-Phaser3.git
 cd SameGame-Phaser3
 npm install
 npm run start:dev
@@ -90,8 +87,6 @@ npm run start:dev
 Optionally, run `npm update`. 
 
 ### Building
-
-To build the app:
 
 ```shell
 npm run build
