@@ -1,4 +1,4 @@
-import _my_settings from "./_globalSettings";
+import _globalSettings from "./_globalSettings";
 import generate_tile from "./helper_generateTilesMap";
 import AssetsBuilder from './assets_builder';
 import AssetsAnimator from "./assets_animator";
@@ -7,7 +7,7 @@ import AssetsAnimator from "./assets_animator";
  * lab scene
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_Lab extends Phaser.Scene {
+export default class SceneLab extends Phaser.Scene {
     constructor(config) {
         super(config);
     }
@@ -28,7 +28,7 @@ export default class Scene_Lab extends Phaser.Scene {
         this.scoreTween = null;
         this.tween_scoreImpactEnlarge = null;
         // goal
-        this.currentGoal = _my_settings.levelStartGoal + data.level * _my_settings.levelStepGoal;
+        this.currentGoal = _globalSettings.levelStartGoal + data.level * _globalSettings.levelStepGoal;
     }
 
     create() {
@@ -66,50 +66,32 @@ export default class Scene_Lab extends Phaser.Scene {
 
     //----------------------------------helpers------------------------------------
 
-    calculateStepScore(totalNeighb) {
-        /**
-         * calculate score based on tiles eliminated per step
-         * @type {number}
-         */
-        let first = _my_settings.singleTileScore;
-        let last = _my_settings.singleTileScore + _my_settings.tileScoreStepScore * totalNeighb;
-        return parseInt((first + last) * (totalNeighb + 1) / 2, 10);
-    }
-
-    calculatePenalty(remainSize) {
-        /**
-         * calculate penalty based on remaining tiles
-         * @type {number}
-         */
-        let first = _my_settings.tileScorePenaltyInit;
-        let last = _my_settings.tileScorePenaltyInit + _my_settings.tileScorePenaltyStep * remainSize;
-        return parseInt((first + last) * remainSize / 2, 10);
-    }
-
     initialiseOthers() {
         // background
-        const html1 = this.builder.buildHTML1();
+        this.builder.buildHTML1();
 
         // side
         const html2 = this.builder.buildHTML2();
-        this.assets_animator.dispatchEnterScene(html2)();
+        this.assets_animator.dispatchEnterScene(html2);
 
         // blackboard frame
-        const inner2 = this.builder.buildInner2();
+        this.builder.buildInner2();
 
         // goal texts
         let target_txt = this.builder.buildTargetTxt();
+        // create an identical animation same as another sprite
+        this.assets_animator.addEnterSameAs("txt_goal","txt_current_score");
         //anim enter
-        this.assets_animator.dispatchEnterScene(target_txt)();
+        this.assets_animator.dispatchEnterScene(target_txt);
 
         // score texts
         this.current_txt = this.builder.buildCurrentTxt(target_txt.y + target_txt.width * 0.25,"#dc8cf6");
-        this.assets_animator.dispatchEnterScene(this.current_txt)();//anim enter
+        this.assets_animator.dispatchEnterScene(this.current_txt);//anim enter
         // initial score rolling text
         this.scoreTween = this.tweens.addCounter({
             from: this.previousStepScore,
             to: this.currentScore,
-            duration: _my_settings.rollingTxtDuration,
+            duration: _globalSettings.rollingTxtDuration,
         });
         this.tween_scoreImpactEnlarge = this.tweens.add({targets: this.current_txt});
 
@@ -121,7 +103,7 @@ export default class Scene_Lab extends Phaser.Scene {
             "PLANET.",
             "",
         ];
-        let graphics = this.make.graphics();
+        let graphics = this.add.graphics();
         graphics.fillRect(0, 20, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.25);
         let mask = new Phaser.Display.Masks.GeometryMask(this, graphics);
         let text = this.add.text(0, 30, content, {
@@ -174,7 +156,6 @@ export default class Scene_Lab extends Phaser.Scene {
         // right wall
         this.wallRight = this.matter.add.sprite(this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.65,
             'pack_texture', 'wallRight.png', {shape: tileAndStarPhysics.wallRight});
-        // wallRight.setStatic(true);// no move
         this.wallRight.setScale(this.game._scaleRatio); // retina display scale down
         this.wallRight.displayWidth = this.game.scale.gameSize.width * 0.066; // max width
         this.wallRight.displayHeight = this.game.scale.gameSize.height * 0.7; // max height
@@ -185,7 +166,6 @@ export default class Scene_Lab extends Phaser.Scene {
         // mid wall
         this.wallMid = this.matter.add.sprite(this.game.scale.gameSize.width * 0.5, this.game.scale.gameSize.height * 0.65,
             'pack_texture', 'wallRight.png', {shape: tileAndStarPhysics.wallRight});
-        // wallRight.setStatic(true);// no move
         this.wallMid.setScale(this.game._scaleRatio); // retina display scale down
         this.wallMid.displayWidth = this.game.scale.gameSize.width * 0.066; // max width
         this.wallMid.displayHeight = this.game.scale.gameSize.height * 0.7; // max height
@@ -198,7 +178,7 @@ export default class Scene_Lab extends Phaser.Scene {
         this.matter.world.setBounds(0, 0, this.game.scale.gameSize.width, this.game.scale.gameSize.height);
 
         // per tile width
-        this.tileWidth = ((((this.wallRight.x - this.wallRight.displayWidth / 2) - (this.wallLeft.x + this.wallLeft.displayWidth / 2))) / _my_settings.colTiles);
+        this.tileWidth = (((this.wallRight.x - this.wallRight.displayWidth / 2) - (this.wallLeft.x + this.wallLeft.displayWidth / 2)) / _globalSettings.colTiles);
         //arcade set not clash
         // wall and tiles in different groups
         this.colli_wallsGroup = this.add.group();
@@ -222,12 +202,12 @@ export default class Scene_Lab extends Phaser.Scene {
     addTileClickEvent() {
         let myself = this;
         let allDroppedCheck = setInterval(() => {
-            if (myself.colli_tileGroup.children.entries.length === _my_settings.rowTiles * _my_settings.colTiles) {
+            if (myself.colli_tileGroup.children.entries.length === _globalSettings.rowTiles * _globalSettings.colTiles) {
                 clearInterval(allDroppedCheck);
                 myself.pauseBtn.visible = true;
                 // event listener click on each tile
-                for (let i = 0; i < myself.colli_tileGroup.children.entries.length; i++) {
-                    myself.colli_tileGroup.children.entries[i].on('pointerup', function () {
+                for (let child of myself.colli_tileGroup.children.entries) {
+                    child.on('pointerup', function () {
                         myself.popSound.play();
                         // update current text
                         myself.previousStepScore = myself.currentScore;
@@ -236,11 +216,11 @@ export default class Scene_Lab extends Phaser.Scene {
                         myself.scoreTween = myself.tweens.addCounter({
                             from: myself.previousStepScore,
                             to: myself.currentScore,
-                            duration: _my_settings.rollingTxtDuration,
+                            duration: _globalSettings.rollingTxtDuration,
                         });
-                        for (let k = 0; k < myself.colli_tileGroup.children.entries.length; k++) {
-                            if(Math.abs(myself.colli_tileGroup.children.entries[k].x-this.x)<=10) {
-                                myself.colli_tileGroup.children.entries[k].setVelocity(Math.random() -1, -myself.energy);
+                        for (let neibor of myself.colli_tileGroup.children.entries) {
+                            if(Math.abs(neibor.x-this.x)<=10) {
+                                neibor.setVelocity(Math.random() -1, -myself.energy);
                                 myself.popSound2.play();
                             }
                         }

@@ -1,15 +1,12 @@
-import _my_settings from "./_globalSettings";
+import _globalSettings from "./_globalSettings";
 
 /**
  * debugger settings
  * Author: hl778 https://github.com/hl778
  */
-export default class Scene_Debug extends Phaser.Scene {
+export default class SceneDebug extends Phaser.Scene {
     constructor(config) {
         super(config);
-    }
-
-    preload() {
     }
 
     init() {
@@ -69,12 +66,12 @@ export default class Scene_Debug extends Phaser.Scene {
         let form = document.createElement("form");
         form.style = 'padding-top:10px;'
         // create form content
-        for (let prop in _my_settings) {
+        for (let prop in _globalSettings) {
             //skip excluded properties
             if (this.excludes.includes(prop)) {
                 continue;
             }
-            let cur_value = _my_settings[prop];
+            let cur_value = _globalSettings[prop];
             let cur_type = "text";
             //label
             let label = document.createElement("label");
@@ -126,6 +123,7 @@ export default class Scene_Debug extends Phaser.Scene {
         let reset = document.createElement("button");
         reset.setAttribute('type', "button");
         reset.onclick = function () {
+            reset.disabled = true;
             myself.cameras.main.fadeOut(300, 10, 200, 10);
             myself.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                 localStorage.clear();
@@ -147,14 +145,15 @@ export default class Scene_Debug extends Phaser.Scene {
         let sub = document.createElement("button");
         sub.setAttribute('type', "button");
         sub.onclick = function () {
+            sub.disabled = true;
             localStorage.setItem("editedDebug", "true");
-            for (let i = 0; i < document.getElementsByTagName("input").length; i++) {
-                let edit_val = document.getElementsByTagName("input")[i].value;
-                let edit_name = document.getElementsByTagName("input")[i].name;
+            for (let fieldValue of document.getElementsByTagName("input")) {
+                let edit_val = fieldValue.value;
+                let edit_name = fieldValue.name;
                 if (!isNaN(edit_val)) {
                     edit_val = parseFloat(edit_val)
                 }
-                if (_my_settings[edit_name] !== edit_val) {
+                if (_globalSettings[edit_name] !== edit_val) {
                     if(edit_name in myself.constrains) { // constrain values within given range
                         edit_val = Math.max(edit_val,myself.constrains[edit_name][0]);
                         edit_val = Math.min(edit_val,myself.constrains[edit_name][1]);

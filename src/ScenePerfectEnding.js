@@ -1,4 +1,4 @@
-import _my_settings from "./_globalSettings";
+import _globalSettings from "./_globalSettings";
 
 /**
  * Perfect ending scene
@@ -11,8 +11,8 @@ export default class ScenePerfectEnding extends Phaser.Scene {
 
     init(data) {
         this.score = data.score;
-        _my_settings.tileMapMaxSteps = _my_settings.tileMapMaxSteps_store;
-        _my_settings.tileMapMinSteps = _my_settings.tileMapMinSteps_store;
+        _globalSettings.tileMapMaxSteps = _globalSettings.tileMapMaxSteps_store;
+        _globalSettings.tileMapMinSteps = _globalSettings.tileMapMinSteps_store;
     }
 
     create() {
@@ -60,7 +60,7 @@ export default class ScenePerfectEnding extends Phaser.Scene {
      */
     shiftNextScene() {
         this.cameras.main.fadeOut(2500, 0, 0, 0);
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
             this.scene.stop("perfectEndingScene");
             this.scene.start("endingTileScene", {score: this.score});
         });

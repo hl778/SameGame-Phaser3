@@ -2,7 +2,7 @@
 
 // settings for debug purpose
 
-const _my_settings = {
+const _globalSettings = {
     rowTiles:10, // number of rows of tiles
     colTiles:10,//number of col of tiles
     totalChoices:6,//number of types of tiles
@@ -48,4 +48,4 @@ const _my_settings = {
 
 };
 
-export default _my_settings
+export default _globalSettings

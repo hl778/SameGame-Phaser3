@@ -1,4 +1,4 @@
-import _my_settings from "./_globalSettings";
+import _globalSettings from "./_globalSettings";
 import AssetsAnimator from './assets_animator';
 import AssetsBuilder from "./assets_builder";
 
@@ -20,18 +20,16 @@ export default class SceneTitle extends Phaser.Scene {
         this.titleScene_group = [];
         // debug settings
         if (localStorage.getItem("editedDebug") !== null) {
-            for (let prop in _my_settings) {
+            for (let prop in _globalSettings) {
                 if (localStorage.getItem(prop) !== null) {
                     if (isNaN(localStorage.getItem(prop))) {
-                        _my_settings[prop] = localStorage.getItem(prop);
+                        _globalSettings[prop] = localStorage.getItem(prop);
                     } else {
-                        _my_settings[prop] = Number(localStorage.getItem(prop));
+                        _globalSettings[prop] = Number(localStorage.getItem(prop));
                     }
                 }
             }
         }
-        // is ready to next scene
-        this.isOver = false;
     }
 
     create() {
@@ -41,6 +39,7 @@ export default class SceneTitle extends Phaser.Scene {
         this.assets_animator = new AssetsAnimator(this);
         this.cameras.main.setBackgroundColor('#000000');
         this.createAssets();
+        this.dispatchEnterAnimation();
     }
 
     /**
@@ -50,79 +49,62 @@ export default class SceneTitle extends Phaser.Scene {
     createAssets() {
         // background
         const html1 = this.builder.buildHTML1();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(html1)();
         this.titleScene_group.push(html1);
 
         // red gradient
         const html9 = this.builder.buildHTML9();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(html9)();
+        // create an identical animation same as another sprite
+        this.assets_animator.addEnterSameAs("html9","html1");
         this.titleScene_group.push(html9);
 
         // frame
         const html9_1 = this.builder.buildHTML9_1();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(html9_1)();
         this.titleScene_group.push(html9_1);
 
         // title
         this.html3 = this.builder.buildHTML3();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(this.html3)();
         this.titleScene_group.push(this.html3);
 
         // side cloud
         const html2 = this.builder.buildHTML2();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(html2)();
         this.titleScene_group.push(html2);
 
         // moon
-        const html4 = this.builder.buildHTML4();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(html4)();
-        this.titleScene_group.push(html4);
+        this.html4 = this.builder.buildHTML4();
+        this.titleScene_group.push(this.html4);
 
         // character
         this.html5 = this.builder.buildHTML5();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(this.html5)();
         this.titleScene_group.push(this.html5);
 
         // btn code
         this.html8 = this.builder.buildHTML8();
         this.titleBtn_group.push(this.html8);
-        this.assets_animator.dispatchEnterScene(this.html8)(); //anim enter
         this.titleScene_group.push(this.html8);
 
         // btn credit
         this.html8credits = this.builder.buildHTML8Credits();
+        // create an identical animation same as another sprite
+        this.assets_animator.addEnterSameAs("html8credits","html8");
         this.titleBtn_group.push(this.html8credits);
-        this.assets_animator.dispatchEnterScene(this.html8credits)(); //anim enter
         this.titleScene_group.push(this.html8credits);
 
         // btn debug
         this.html8Debug = this.builder.buildHTML8Debug();
-        //anim enter
-        this.assets_animator.dispatchEnterScene(this.html8Debug)();
         this.titleScene_group.push(this.html8Debug);
 
         // btn debug close
         this.html8Debug2 = this.builder.buildHTML8Debug2();
-        this.assets_animator.dispatchEnterScene(this.html8Debug2)(); //anim enter
         this.titleScene_group.push(this.html8Debug2);
 
         // btn start
         this.html7 = this.builder.buildHTML7();
         this.titleBtn_group.push(this.html7);
-        this.assets_animator.dispatchEnterScene(this.html7)();//anim enter
         this.titleScene_group.push(this.html7);
 
         // btn must pass
         this.html8_2 = this.builder.buildHTML8_2();
         this.titleBtn_group.push(this.html8_2);
-        this.assets_animator.dispatchEnterScene(this.html8_2)(); //anim enter
         this.titleScene_group.push(this.html8_2);
         this.titleDebugBtn_group.push(this.html8_2);
 
@@ -131,33 +113,65 @@ export default class SceneTitle extends Phaser.Scene {
         this.titleBtn_group.push(this.html8_6);
         this.titleScene_group.push(this.html8_6);
         this.titleDebugBtn_group.push(this.html8_6);
+        // create an identical exit animation same as another sprite
+        this.assets_animator.addExitSameAs("html8_6","html8_2");
 
         // btn scene to share
         this.html8_5 = this.builder.buildHTML8_5();
         this.titleBtn_group.push(this.html8_5);
         this.titleScene_group.push(this.html8_5);
         this.titleDebugBtn_group.push(this.html8_5);
+        // create an identical exit animation same as another sprite
+        this.assets_animator.addExitSameAs("html8_5","html8_2");
 
         // btn lab
         this.html8_3 = this.builder.buildHTML8_3();
         this.titleBtn_group.push(this.html8_3);
-        this.titleScene_group.push(this.html8_3); //anim enter
+        this.titleScene_group.push(this.html8_3);
         this.titleDebugBtn_group.push(this.html8_3);
+        // create an identical exit animation same as another sprite
+        this.assets_animator.addExitSameAs("html8_3","html8_2");
 
         // btn scene to debug
         this.html8_7 = this.builder.buildHTML8_7();
         this.titleBtn_group.push(this.html8_7);
         this.titleScene_group.push(this.html8_7);
         this.titleDebugBtn_group.push(this.html8_7);
+        // create an identical exit animation same as another sprite
+        this.assets_animator.addExitSameAs("html8_7","html8_2");
 
         // btn scene to map viewer
         this.html8_11 = this.builder.buildHTML8_11();
         this.titleBtn_group.push(this.html8_11);
         this.titleScene_group.push(this.html8_11);
         this.titleDebugBtn_group.push(this.html8_11);
+        // create an identical exit animation same as another sprite
+        this.assets_animator.addExitSameAs("html8_11","html8_2");
     }
 
+    /**
+     * dispatch scene enter animations
+     */
+    dispatchEnterAnimation() {
+        for(const sprite of this.titleScene_group) {
+            this.assets_animator.dispatchEnterScene(sprite); //anim enter
+        }
+    }
 
+    /**
+     * dispatch scene exit animations
+     */
+    dispatchExitAnimation() {
+        //exit scene animation for each child
+        for (const sprite of this.titleScene_group) {
+            // dispatch actions
+            this.assets_animator.dispatchExitScene(sprite);
+        }
+    }
+
+    /**
+     * open debug menu
+     */
     clickOpenDebug() {
         this.html8Debug.visible = false;
         this.html8Debug2.visible = true;
@@ -166,6 +180,9 @@ export default class SceneTitle extends Phaser.Scene {
         })
     }
 
+    /**
+     * close debug menu
+     */
     clickCloseDebug() {
         this.html8Debug2.visible = false;
         this.html8Debug.visible = true;
@@ -178,18 +195,7 @@ export default class SceneTitle extends Phaser.Scene {
      * sourcecode button click event
      */
     clickContact() {
-        window.open(_my_settings.contactAdd, _my_settings.contactNewTab);
-    }
-
-    /**
-     * make all buttons non-clickable, prevent duplicated animations
-     */
-    disableAllBtns() {
-        this.html5.off('pointerdown');
-        this.html3.off('pointerdown');
-        this.titleBtn_group.forEach((element) => {
-            element.disableInteractive();
-        });
+        window.open(_globalSettings.contactAdd, _globalSettings.contactNewTab);
     }
 
     /**
@@ -226,7 +232,6 @@ export default class SceneTitle extends Phaser.Scene {
             duration: Math.random() * 1100 + 350,
             ease: "Linear",
             onComplete: () => {
-                this.tweens.killTweensOf(titleCharFire);
                 titleCharFire.destroy();
             }
         });
@@ -272,7 +277,6 @@ export default class SceneTitle extends Phaser.Scene {
             duration: Math.random() * 3000 + 200,
             ease: "Power1",
             onComplete: () => {
-                this.tweens.killTweensOf(titleHeaderFire);
                 titleHeaderFire.destroy();
             }
         });
@@ -284,7 +288,7 @@ export default class SceneTitle extends Phaser.Scene {
     clickDebug() {
         this.disableAllBtns();
         this.cameras.main.fadeOut(200, 0, 0, 0);
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
             this.scene.start('debugScene');
         });
     }
@@ -295,7 +299,7 @@ export default class SceneTitle extends Phaser.Scene {
     clickTileMapViewer() {
         this.disableAllBtns();
         this.cameras.main.fadeOut(200, 0, 0, 0);
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
             this.scene.start('tileMapViewScene');
         });
     }
@@ -306,133 +310,91 @@ export default class SceneTitle extends Phaser.Scene {
     clickCredits() {
         this.disableAllBtns();
         this.cameras.main.fadeOut(300, 0, 0, 0);
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
             this.scene.start('creditsScene', {score: 9990});
         });
-
     }
 
     /**
      * share button click event
-     * @param reaction_group
      */
-    clickShare(reaction_group) {
+    clickShare() {
         this.disableAllBtns();
-
-        let myself = this;
-        //exit scene animation for each child
-        for (const sprite of reaction_group) {
-            // dispatch actions
-            this.assets_animator.dispatchExitScene(sprite)();
-            //kill tween, not destroy
-            this.tweens.killTweensOf(sprite);
-        }
-        let shiftScene = setInterval(() => {
-            if (myself.isOver) { // after animation
-                clearInterval(shiftScene);
-                this.cameras.main.fadeOut(300, 0, 0, 0);
-                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    this.scene.start('shareScene', {score: 9990});
-                });
-
-            }
-        }, 10);
+        //exit scene animation
+        this.dispatchExitAnimation();
+        let promise_lastPerson = this.assets_animator.dispatchLastPersonExit(this.html4);
+        promise_lastPerson.then(()=>{
+            this.cameras.main.fadeOut(300, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.scene.start('shareScene', {score: 9990});
+            });
+        });
     }
 
     /**
      * ending button click event
-     * @param reaction_group
      */
-    clickEnding(reaction_group) {
+    clickEnding() {
         this.disableAllBtns();
-
-        let myself = this;
-        //exit scene animation for each child
-        for (const sprite of reaction_group) {
-            // dispatch actions
-            this.assets_animator.dispatchExitScene(sprite)();
-            //kill tween, not destroy
-            this.tweens.killTweensOf(sprite);
-        }
-        let shiftScene = setInterval(() => {
-            if (myself.isOver) { // after animation
-                clearInterval(shiftScene);
-                this.cameras.main.fadeOut(300, 0, 0, 0);
-                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    myself.scene.start('perfectEndingScene', {score: 9990});
-                });
-            }
-        }, 10);
+        //exit scene animation
+        this.dispatchExitAnimation();
+        let promise_lastPerson = this.assets_animator.dispatchLastPersonExit(this.html4);
+        promise_lastPerson.then(()=>{
+            this.cameras.main.fadeOut(300, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.scene.start('perfectEndingScene', {score: 9990});
+            });
+        });
     }
 
     /**
      * lab button click event
-     * @param reaction_group
      */
-    clickLab(reaction_group) {
+    clickLab() {
         this.disableAllBtns();
-
-        let myself = this;
-        //exit scene animation for each child
-        for (const sprite of reaction_group) {
-            // dispatch actions
-            this.assets_animator.dispatchExitScene(sprite)();
-            //kill tween, not destroy
-            this.tweens.killTweensOf(sprite);
-        }
-        let shiftScene = setInterval(() => {
-            if (myself.isOver) { // after animation
-                clearInterval(shiftScene);
-                this.scene.start('labScene', {level: 0, lastLvlScore: 0});
-            }
-        }, 10);
+        //exit scene animation
+        this.dispatchExitAnimation();
+        let promise_lastPerson = this.assets_animator.dispatchLastPersonExit(this.html4);
+        promise_lastPerson.then(()=>{
+            this.scene.start('labScene', {level: 0, lastLvlScore: 0});
+        });
     }
 
     /**
      * must pass button click event
-     * @param reaction_group
      */
-    clickMustPass(reaction_group) {
+    clickMustPass() {
         this.disableAllBtns();
-        let myself = this;
-        //exit scene animation for each child
-        for (const sprite of reaction_group) {
-            // dispatch actions
-            this.assets_animator.dispatchExitScene(sprite)();
-            //kill tween, not destroy
-            this.tweens.killTweensOf(sprite);
-        }
-        let shiftScene = setInterval(() => {
-            if (myself.isOver) { // after animation
-                clearInterval(shiftScene);
-                this.scene.start('gameScene', {level: 0, lastLvlScore: 0, mustPass: true});
-            }
-        }, 10);
+        //exit scene animation
+        this.dispatchExitAnimation();
+        let promise_lastPerson = this.assets_animator.dispatchLastPersonExit(this.html4);
+        promise_lastPerson.then(()=>{
+            this.scene.start('gameScene', {level: 0, lastLvlScore: 0, mustPass: true});
+        });
     }
-
 
     /**
      * start button click event
-     * @param reaction_group
      */
-    clickStart(reaction_group) {
+    clickStart() {
         this.disableAllBtns();
+        //exit scene animation
+        this.dispatchExitAnimation();
+        let promise_lastPerson = this.assets_animator.dispatchLastPersonExit(this.html4);
+        promise_lastPerson.then(()=>{
+            this.scene.start('gameScene', {level: 0, lastLvlScore: 0});
+        });
+    }
 
-        let myself = this;
-        //exit scene animation for each child
-        for (const sprite of reaction_group) {
-            // dispatch actions
-            this.assets_animator.dispatchExitScene(sprite)();
-            //kill tween, not destroy
-            this.tweens.killTweensOf(sprite);
+    /**
+     * make all buttons non-clickable, prevent duplicated animations
+     */
+    disableAllBtns() {
+        this.html5.off('pointerdown');
+        this.html3.off('pointerdown');
+        for(let sprite of this.titleBtn_group) {
+            sprite.disableInteractive();
         }
-        let shiftScene = setInterval(() => {
-            if (myself.isOver) { // after animation
-                clearInterval(shiftScene);
-                this.scene.start('gameScene', {level: 0, lastLvlScore: 0});
-            }
-        }, 30);
-
     }
 
 }

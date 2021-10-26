@@ -32,6 +32,7 @@ export default class AssetsBuilder {
         html9.setScale(this.scene.game._scaleRatio); // retina display scale down
         html9.displayWidth = this.scene.game.scale.gameSize.width - 20; // width
         html9.displayHeight = this.scene.game.scale.gameSize.height - 20; // height
+        html9.name = "html9"; // define name
         return html9;
     }
 
@@ -47,6 +48,8 @@ export default class AssetsBuilder {
         html9_1.setScale(this.scene.game._scaleRatio); // retina display scale down
         html9_1.displayWidth = this.scene.game.scale.gameSize.width * 0.99; // width
         html9_1.displayHeight = this.scene.game.scale.gameSize.height; // height
+        html9_1.name = html9_1.frame.name.slice(0, -4); // define name
+        html9_1.name = "html9_1"; // define name
         return html9_1;
     }
 
@@ -64,6 +67,7 @@ export default class AssetsBuilder {
         html3.scaleY = html3.scaleX; // keep the ratio
         html3.setInteractive({useHandCursor: true});//btn hover event
         html3.on('pointerdown', () => this.scene.clickTitle(html3));
+        html3.name = "html3"; // define name
         return html3;
     }
 
@@ -78,6 +82,7 @@ export default class AssetsBuilder {
         html2.setScale(this.scene.game._scaleRatio); // retina display scale down
         html2.displayWidth = this.scene.game.scale.gameSize.width; // width
         html2.scaleY = html2.scaleX; // keep the ratio
+        html2.name = "html2"; // define name
         return html2;
     }
 
@@ -94,6 +99,7 @@ export default class AssetsBuilder {
         html4.setScale(this.scene.game._scaleRatio); // retina display scale down
         html4.displayWidth = this.scene.game.scale.gameSize.width; // max width
         html4.scaleY = html4.scaleX; // keep the ratio
+        html4.name = "html4"; // define name
         return html4;
     }
 
@@ -110,6 +116,7 @@ export default class AssetsBuilder {
         html5.setScale(this.scene.game._scaleRatio); // retina display scale down
         html5.displayWidth = this.scene.game.scale.gameSize.width * 0.97; // max width
         html5.scaleY = html5.scaleX; // keep the ratio
+        html5.name = "html5"; // define name
         html5.setInteractive({useHandCursor: true});//btn hover event
         html5.on('pointerdown', () => this.scene.clickChar(html5));
         return html5;
@@ -128,6 +135,7 @@ export default class AssetsBuilder {
         html8.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8.displayWidth = this.scene.game.scale.gameSize.width * 0.35; // width
         html8.scaleY = html8.scaleX; // keep the ratio
+        html8.name = "html8"; // define name
         html8.setInteractive({useHandCursor: true});//btn hover event
         html8.on('pointerdown', () => this.scene.clickContact());
         return html8;
@@ -146,6 +154,7 @@ export default class AssetsBuilder {
         html8credits.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8credits.displayWidth = this.scene.html8.displayWidth; // max width
         html8credits.scaleY = html8credits.scaleX; // keep the ratio
+        html8credits.name = "html8credits"; // define name
         html8credits.setInteractive({useHandCursor: true});//btn hover event
         html8credits.on('pointerdown', () => this.scene.clickCredits());
         return html8credits;
@@ -163,8 +172,9 @@ export default class AssetsBuilder {
         html8Debug.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8Debug.displayWidth = this.scene.game.scale.gameSize.width * 0.4; // max width
         html8Debug.scaleY = html8Debug.scaleX; // keep the ratio
+        html8Debug.name = "html8Debug"; // define name
         html8Debug.setInteractive({useHandCursor: true});//btn hover event
-        html8Debug.on('pointerdown', () => this.scene.clickOpenDebug(this.scene.titleScene_group));
+        html8Debug.on('pointerdown', () => this.scene.clickOpenDebug());
         return html8Debug;
     }
 
@@ -180,8 +190,9 @@ export default class AssetsBuilder {
         html8Debug2.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8Debug2.displayWidth = this.scene.game.scale.gameSize.width * 0.4; // max width
         html8Debug2.scaleY = html8Debug2.scaleX; // keep the ratio
+        html8Debug2.name = "html8Debug2"; // define name
         html8Debug2.setInteractive({useHandCursor: true});//btn hover event
-        html8Debug2.on('pointerdown', () => this.scene.clickCloseDebug(this.scene.titleScene_group));
+        html8Debug2.on('pointerdown', () => this.scene.clickCloseDebug());
         html8Debug2.visible = false;
         return html8Debug2;
     }
@@ -198,8 +209,9 @@ export default class AssetsBuilder {
         html7.setScale(this.scene.game._scaleRatio); // retina display scale down
         html7.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html7.scaleY = html7.scaleX; // keep the ratio
+        html7.name = "html7"; // define name
         html7.setInteractive({useHandCursor: true});//btn hover event
-        html7.on('pointerdown', () => this.scene.clickStart(this.scene.titleScene_group));
+        html7.on('pointerdown', () => this.scene.clickStart());
         return html7;
     }
 
@@ -216,8 +228,9 @@ export default class AssetsBuilder {
         html8_2.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_2.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_2.scaleY = html8_2.scaleX; // keep the ratio
+        html8_2.name = "html8_2"; // define name
         html8_2.setInteractive({useHandCursor: true});//btn hover event
-        html8_2.on('pointerdown', () => this.scene.clickMustPass(this.scene.titleScene_group));
+        html8_2.on('pointerdown', () => this.scene.clickMustPass());
         html8_2.visible = false;
         return html8_2;
     }
@@ -235,8 +248,9 @@ export default class AssetsBuilder {
         html8_6.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_6.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_6.scaleY = html8_6.scaleX; // keep the ratio
+        html8_6.name = "html8_6"; // define name
         html8_6.setInteractive({useHandCursor: true});//btn hover event
-        html8_6.on('pointerdown', () => this.scene.clickEnding(this.scene.titleScene_group));// callback
+        html8_6.on('pointerdown', () => this.scene.clickEnding());// callback
         html8_6.visible = false;
         return html8_6;
     }
@@ -254,8 +268,9 @@ export default class AssetsBuilder {
         html8_5.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_5.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_5.scaleY = html8_5.scaleX; // keep the ratio
+        html8_5.name = "html8_5"; // define name
         html8_5.setInteractive({useHandCursor: true});//btn hover event
-        html8_5.on('pointerdown', () => this.scene.clickShare(this.scene.titleScene_group));// callback
+        html8_5.on('pointerdown', () => this.scene.clickShare());// callback
         html8_5.visible = false;
         return html8_5;
     }
@@ -273,8 +288,9 @@ export default class AssetsBuilder {
         html8_3.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_3.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_3.scaleY = html8_3.scaleX; // keep the ratio
+        html8_3.name = "html8_3"; // define name
         html8_3.setInteractive({useHandCursor: true});//btn hover event
-        html8_3.on('pointerdown', () => this.scene.clickLab(this.scene.titleScene_group));
+        html8_3.on('pointerdown', () => this.scene.clickLab());
         html8_3.visible = false;
         return html8_3;
     }
@@ -292,6 +308,7 @@ export default class AssetsBuilder {
         html8_7.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_7.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_7.scaleY = html8_7.scaleX; // keep the ratio
+        html8_7.name = "html8_7"; // define name
         html8_7.setInteractive({useHandCursor: true});//btn hover event
         html8_7.on('pointerdown', () => this.scene.clickDebug());// callback
         html8_7.visible = false;
@@ -311,6 +328,7 @@ export default class AssetsBuilder {
         html8_11.setScale(this.scene.game._scaleRatio); // retina display scale down
         html8_11.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         html8_11.scaleY = html8_11.scaleX; // keep the ratio
+        html8_11.name = "html8_11"; // define name
         html8_11.setInteractive({useHandCursor: true});//btn hover event
         html8_11.on('pointerdown', () => this.scene.clickTileMapViewer());// callback
         html8_11.visible = false;
@@ -329,6 +347,7 @@ export default class AssetsBuilder {
         inner2.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner2.displayWidth = this.scene.game.scale.gameSize.width; // max width
         inner2.displayHeight = this.scene.game.scale.gameSize.height * 0.7; // max height
+        inner2.name = "inner2"; // define name
         return inner2;
     }
 
@@ -349,6 +368,7 @@ export default class AssetsBuilder {
         inner5.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner5.displayWidth = this.scene.game.scale.gameSize.width * current_w; // max width
         inner5.scaleY = inner5.scaleX; // keep the ratio
+        inner5.name = "inner5"; // define name
         return inner5;
     }
 
@@ -416,6 +436,7 @@ export default class AssetsBuilder {
         inner4.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner4.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         inner4.scaleY = inner4.scaleX; // keep the ratio
+        inner4.name = "inner4"; // define name
         return inner4;
     }
 
@@ -432,6 +453,7 @@ export default class AssetsBuilder {
         inner5_2_face.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner5_2_face.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         inner5_2_face.scaleY = inner5_2_face.scaleX; // keep the ratio
+        inner5_2_face.name = "inner5_2_face"; // define name
         inner5_2_face.visible = false;
         return inner5_2_face;
     }
@@ -449,6 +471,7 @@ export default class AssetsBuilder {
         inner5_3_face.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner5_3_face.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         inner5_3_face.scaleY = inner5_3_face.scaleX; // keep the ratio
+        inner5_3_face.name = "inner5_3_face"; // define name
         inner5_3_face.visible = false;
         return inner5_3_face;
     }
@@ -467,6 +490,7 @@ export default class AssetsBuilder {
         inner5_5_face.displayWidth = this.scene.game.scale.gameSize.width * 0.55; // max width
         inner5_5_face.scaleY = inner5_5_face.scaleX; // keep the ratio
         inner5_5_face.visible = false;
+        inner5_5_face.name = "inner5_5_face"; // define name
         return inner5_5_face;
     }
 
@@ -519,12 +543,13 @@ export default class AssetsBuilder {
         pauseBtn.setInteractive({ useHandCursor: true });//btn hover event
         pauseBtn.on('pointerdown', () => this.scene.clickPause());
         pauseBtn.visible = false;
+        pauseBtn.name = "pause"; // define name
         return pauseBtn;
     }
 
     /**
      * build platform in Arcade
-     * @returns {obj} - a Phaser sprite
+     * @returns {Phaser.Types.Physics.Arcade.SpriteWithDynamicBody} - a Phaser sprite
      */
     buildPlatform() {
         // bottom invisible platform
@@ -537,12 +562,13 @@ export default class AssetsBuilder {
         platform.body.setAllowGravity(false);
         platform.displayHeight = 10;
         platform.alpha = 0;
+        platform.name = "platform"; // define name
         return platform;
     }
 
     /**
      * build left wall in Arcade
-     * @returns {obj} - a Phaser sprite
+     * @returns {Phaser.Types.Physics.Arcade.SpriteWithDynamicBody} - a Phaser sprite
      */
     buildLeftWall() {
         // left wall
@@ -554,25 +580,26 @@ export default class AssetsBuilder {
         wallLeft.body.setAllowGravity(false);
         wallLeft.setImmovable(true);
         wallLeft.alpha = 0;
+        wallLeft.name = "wallLeft"; // define name
         return wallLeft;
     }
 
     /**
      * build right wall in Arcade
-     * @returns {obj} - a Phaser sprite
+     * @returns {Phaser.Types.Physics.Arcade.SpriteWithDynamicBody} - a Phaser sprite
      */
     buildRightWall() {
         // right wall
         const wallRight = this.scene.physics.add.sprite(this.scene.game.scale.gameSize.width,
             this.scene.game.scale.gameSize.height * 0.65,
             'pack_texture', 'wallRight.png');
-        // wallRight.setStatic(true);// no move
         wallRight.setScale(this.scene.game._scaleRatio); // retina display scale down
         wallRight.displayWidth = this.scene.game.scale.gameSize.width * 0.066; // max width
         wallRight.displayHeight = this.scene.game.scale.gameSize.height * 0.7; // max height
         wallRight.body.setAllowGravity(false);
         wallRight.setImmovable(true);
         wallRight.alpha = 0;
+        wallRight.name = "wallRight"; // define name
         return wallRight;
     }
 
@@ -589,6 +616,7 @@ export default class AssetsBuilder {
         inner_share_img.setScale(this.scene.game._scaleRatio); // retina display scale down
         inner_share_img.displayWidth = this.scene.game.scale.gameSize.width*0.8; // width
         inner_share_img.scaleY = inner_share_img.scaleX; // keep the ratio
+        inner_share_img.name = "inner_share_img"; // define name
         return inner_share_img;
     }
 
@@ -605,6 +633,7 @@ export default class AssetsBuilder {
         html6.setScale(this.scene.game._scaleRatio); // retina display scale down
         html6.displayWidth = this.scene.game.scale.gameSize.width*0.5; // width
         html6.scaleY = html6.scaleX; // keep the ratio
+        html6.name = "html6"; // define name
         return html6;
     }
 
@@ -640,6 +669,7 @@ export default class AssetsBuilder {
         html11.scaleY = html11.scaleX; // keep the ratio
         html11.setInteractive({ useHandCursor: true });//btn hover event
         html11.on('pointerdown', () => this.scene.clickAgain(html11));
+        html11.name = "html11"; // define name
         return html11;
     }
 

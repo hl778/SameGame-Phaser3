@@ -42,7 +42,12 @@ module.exports = merge(base, {
     plugins: [
         new CopyPlugin({
             patterns: [
-                {from: './public/assets', to: './assets'},
+                {from: './public/assets', to: './assets',
+                    globOptions: {
+                        ignore: [
+                            '**/docs'
+                        ]
+                    }},
                 {from: './manifest.webmanifest', to: './'},
             ],
         }),
