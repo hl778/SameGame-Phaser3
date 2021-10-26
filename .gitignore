@@ -119,3 +119,14 @@ venv/
 *.csv
 # Dockerfile
 .settings/
+
+# react file
+.react/
+.vscode/
+/.pnp
+.pnp.js
+/build
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
