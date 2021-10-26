@@ -17,7 +17,7 @@ const _my_settings = {
     tileMapMinSteps_store: 2, // min generated successive tiles of same type, randomly, not guaranteed on min
     similarDigits:10000, // control comparison of floats, 100 means 2 decimal points
 
-    contactAdd: "https://hl778.github.io/SameGame-Phaser3/", // source code address
+    contactAdd: "https://github.com/hl778/SameGame-Phaser3", // source code address
     contactNewTab: "_self", // new tab or same tab
 
     // in-game
