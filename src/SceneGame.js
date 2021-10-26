@@ -298,10 +298,10 @@ export default class SceneGame extends Phaser.Scene {
         this.colli_wallsGroup.add(this.wallRight);
 
         // custom collider on y-axis among tiles
-        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, SceneGame.#comparatorArcadeCollider);
+        this.physics.add.collider(this.colli_tileGroup, this.colli_tileGroup, SceneGame.comparatorArcadeCollider);
 
         // custom collider on y among walls and tiles, useful for the bottom platform
-        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, SceneGame.#comparatorArcadeCollider);
+        this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, SceneGame.comparatorArcadeCollider);
     }
 
      initialiseDropTiles() {
@@ -342,7 +342,7 @@ export default class SceneGame extends Phaser.Scene {
                         if (myself.colli_tileGroup.isFull()) {
                             // sort x positions, useful when shifting columns if space
                             myself.initial_x_pos = Array.from(myself.initial_x_pos);
-                            myself.initial_x_pos.sort(SceneGame.#comparatorNumberSort);
+                            myself.initial_x_pos.sort(SceneGame.comparatorNumberSort);
                             resolve("initial tiles generated");
                         }
                     }
@@ -373,19 +373,19 @@ export default class SceneGame extends Phaser.Scene {
                         if (stopped && !myself.isTweening) {
                             // current clicked tile index
                             // let thisIndex = myself.colli_tileGroup.children.entries.findIndex(x => x.frame.name === this.frame.name && x.x === this.x && x.y === this.y);
-                            let thisIndex = SceneGame.#getIndexPosition(this, left_wall_rightX, bottom_platform_topY, myself.tileWidth, myself.blueprint[0].length);
+                            let thisIndex = SceneGame.getIndexPosition(this, left_wall_rightX, bottom_platform_topY, myself.tileWidth, myself.blueprint[0].length);
                             // get neighbors indices of same type
-                            let candidates = SceneGame.#getAllNeighbors(this, thisIndex, myself.initial_x_pos, myself.blueprint[0].length, allChildren);
+                            let candidates = SceneGame.getAllNeighbors(this, thisIndex, myself.initial_x_pos, myself.blueprint[0].length, allChildren);
                             // valid neighbor count
                             let totalNeighb = candidates.size;
                             // if has neighbor of same type, trigger to eliminate tiles
                             if (totalNeighb > 0) {
                                 // reacting animation control
-                                myself.#changeCharacterFilter(totalNeighb);
+                                myself.changeCharacterFilter(totalNeighb);
                                 // sort neighbours
                                 candidates = Array.from(candidates).sort();
-                                let findIndex = SceneGame.#getInsertIndex(candidates, thisIndex);
-                                let to_delete_ind = SceneGame.#getDeleteOrder(thisIndex, findIndex, candidates);
+                                let findIndex = SceneGame.getInsertIndex(candidates, thisIndex);
+                                let to_delete_ind = SceneGame.getDeleteOrder(thisIndex, findIndex, candidates);
                                 // delete tiles and get empty columns x position if any
                                 myself.deleteTiles(to_delete_ind,allChildren);
                             }
@@ -403,7 +403,7 @@ export default class SceneGame extends Phaser.Scene {
             let delete_tile = allChildren[delete_index];
             to_delete_tiles.push(allChildren[delete_index]);
             // current x position with no small error
-            const trueX = SceneGame.#getXposKey(delete_tile.x, this.tilesXPosCount.keys())[1];
+            const trueX = SceneGame.getXposKey(delete_tile.x, this.tilesXPosCount.keys())[1];
             // count at current x position decrease by 1
             // myself.tilesXPosCount[trueX] -= 1;
             this.tilesXPosCount.set(trueX, this.tilesXPosCount.get(trueX) - 1);
@@ -419,23 +419,23 @@ export default class SceneGame extends Phaser.Scene {
             }
         }
         // deletion animation
-        this.#beforeDeletion(to_delete_tiles);
+        this.beforeDeletion(to_delete_tiles);
 
         // rearrange tile array to reflect changes made
-        this.#shiftRowOnMultipleTile(to_delete_ind, this.blueprint[0].length, allChildren)
+        this.shiftRowOnMultipleTile(to_delete_ind, this.blueprint[0].length, allChildren)
         // update x position map count
         if(emptyColsXPos.length>0) {
-            this.#shiftMapLeft(this.tilesXPosCount);
+            this.shiftMapLeft(this.tilesXPosCount);
             // check if need to shift cols
-            this.#shiftAllEmptyCol(allChildren, emptyColsXPos);
+            this.shiftAllEmptyCol(allChildren, emptyColsXPos);
         }else {
             let afterGravity = setInterval(() => {
                 // make sure all animation is finished
                 if (SceneGame.isAllStopped(this.tileGroup_decreasing) && !this.isTweening) {
                     clearInterval(afterGravity);
                     // when no tile can be eliminated
-                    if (this.#isDeadGame(allChildren)) {
-                        this.#afterDeadend(this.tileGroup_decreasing);
+                    if (this.isDeadGame(allChildren)) {
+                        this.afterDeadend(this.tileGroup_decreasing);
                     }
                 }
             }, 100);
@@ -463,13 +463,13 @@ export default class SceneGame extends Phaser.Scene {
      * @param allEntries
      * @returns {boolean}
      */
-    #isDeadGame(allEntries) {
+    isDeadGame(allEntries) {
         for (let i = 0; i < allEntries.length; i++) {
             let tile = allEntries[i];
             if (!tile.active) { // if inactive tile, continue
                 continue;
             }
-            let hasNeighbour = SceneGame.#getMinimumNeighbor(tile, i, this.tilesXPosCount, this.blueprint[0].length, allEntries);
+            let hasNeighbour = SceneGame.getMinimumNeighbor(tile, i, this.tilesXPosCount, this.blueprint[0].length, allEntries);
             if (hasNeighbour) {
                 return false;
             }
@@ -480,7 +480,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * ending scene for happy ending
      */
-    #end_perfectPass() {
+    end_perfectPass() {
         this.pauseBtn.disableInteractive();
         this.pauseBtn.visible = false;
         let myself = this;
@@ -496,16 +496,16 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * ending behaviour for failed game
      */
-    #end_notPass(tileGroup_decreasing) {
+    end_notPass(tileGroup_decreasing) {
         let myself = this;
         this.pauseBtn.disableInteractive();
         this.pauseBtn.visible = false;
-        this.#changeSadFace();
+        this.changeSadFace();
         let allStoppedCheck = setInterval(() => {
             let stopped = SceneGame.isAllStopped(tileGroup_decreasing);
             if (stopped && !myself.isTweening) {
                 clearInterval(allStoppedCheck);
-                let promise_finished = myself.#beforeNotPass(tileGroup_decreasing);
+                let promise_finished = myself.beforeNotPass(tileGroup_decreasing);
                 promise_finished.then(function () {
                     myself.input.on('pointerdown', () => {
                         myself.colli_tileGroup.clear(true, true);
@@ -520,7 +520,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * to next level when pass the current round
      */
-    #end_toNextLvl(tileGroup_decreasing) {
+    end_toNextLvl(tileGroup_decreasing) {
         this.pauseBtn.disableInteractive();
         this.pauseBtn.visible = false;
         let myself = this;
@@ -528,7 +528,7 @@ export default class SceneGame extends Phaser.Scene {
             let stopped = SceneGame.isAllStopped(tileGroup_decreasing);
             if (stopped && !myself.isTweening) {
                 clearInterval(allStoppedCheck);
-                let promise_finished = myself.#beforeNextLvl(tileGroup_decreasing);
+                let promise_finished = myself.beforeNextLvl(tileGroup_decreasing);
                 promise_finished.then(function () {
                     setTimeout(() => {
                         myself.colli_tileGroup.clear(true, true);
@@ -547,7 +547,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * when reach deadend in each round
      */
-    #afterDeadend(tileGroup_decreasing) {
+    afterDeadend(tileGroup_decreasing) {
         let children = tileGroup_decreasing.getChildren();
         for (let child of children) {
             child.disableInteractive();
@@ -555,12 +555,12 @@ export default class SceneGame extends Phaser.Scene {
         // happy ending
         if (this.eliminatedTileCount === this.colli_tileGroup.maxSize &&
             this.currentScore >= this.currentGoal) {
-            this.#end_perfectPass();
+            this.end_perfectPass();
         } else {
             if (this.currentScore < this.currentGoal) {// game over
-                this.#end_notPass(tileGroup_decreasing);
+                this.end_notPass(tileGroup_decreasing);
             } else { // next level
-                this.#end_toNextLvl(tileGroup_decreasing);
+                this.end_toNextLvl(tileGroup_decreasing);
             }
         }
     }
@@ -570,7 +570,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param tileGroup_decreasing
      * @returns {Promise<unknown>}
      */
-    #beforeNotPass(tileGroup_decreasing) {
+    beforeNotPass(tileGroup_decreasing) {
         let myself = this;
         let children = tileGroup_decreasing.getChildren();
         // delete rest tiles
@@ -613,7 +613,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * cleanup before go to the next level
      */
-    #beforeNextLvl(tileGroup_decreasing) {
+    beforeNextLvl(tileGroup_decreasing) {
         /**
          * animation and process before next level
          */
@@ -674,7 +674,7 @@ export default class SceneGame extends Phaser.Scene {
      * animation and cleanup after the eliminated tiles get deleted. This creates the score text and tile deletion animation
      * @param arr_copy
      */
-    #beforeDeletion(arr_copy) {
+    beforeDeletion(arr_copy) {
         for (let i = 0; i < arr_copy.length; i++) {
             // update score
             this.previousStepScore = this.currentScore;
@@ -720,7 +720,7 @@ export default class SceneGame extends Phaser.Scene {
      * and [-1] is at the top-right corner
      * @returns {[*]} - a shifted 1D array
      */
-    static #shiftRowOnSingleTile(tile_index, col_count, arr) {
+    static shiftRowOnSingleTile(tile_index, col_count, arr) {
         // start shifting from tile_index
         let firstTile = arr[tile_index];
         for (let i = tile_index; i < arr.length; i += col_count) {
@@ -740,7 +740,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param arr
      * @returns {*}
      */
-    #shiftRowOnMultipleTile(tile_indices, col_count, arr) {
+    shiftRowOnMultipleTile(tile_indices, col_count, arr) {
         let col_summary = {}; // put indices into their column group
         for (let tile_index of tile_indices) {
             let index = tile_index;
@@ -754,19 +754,19 @@ export default class SceneGame extends Phaser.Scene {
         }
         // shift each col at a time
         for (const array of Object.values(col_summary)) {
-            array.sort(SceneGame.#comparatorNumberSort);
+            array.sort(SceneGame.comparatorNumberSort);
             let previous_index = array[0] - col_count;
             let minIndex = array[0];
             let drop_count = 0
             for (let cur_index of array) {
                 // if its the immediate neighbor
                 if (cur_index === previous_index + col_count) {
-                    SceneGame.#shiftRowOnSingleTile(minIndex, col_count, arr);
+                    SceneGame.shiftRowOnSingleTile(minIndex, col_count, arr);
                     previous_index = cur_index;
                     drop_count += 1;
                 } else {// if not immediate above neighbor
                     minIndex = cur_index - drop_count * col_count;
-                    SceneGame.#shiftRowOnSingleTile(minIndex, col_count, arr);
+                    SceneGame.shiftRowOnSingleTile(minIndex, col_count, arr);
                     previous_index = cur_index;
                     drop_count = +1;
                 }
@@ -780,7 +780,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param allEntries
      * @param emptyColsXPos
      */
-    #shiftAllEmptyCol(allEntries, emptyColsXPos) {
+    shiftAllEmptyCol(allEntries, emptyColsXPos) {
         let myself = this;
         // check if no empty x pos
         if (emptyColsXPos.length === 0) {
@@ -789,29 +789,29 @@ export default class SceneGame extends Phaser.Scene {
                 if (SceneGame.isAllStopped(myself.tileGroup_decreasing)) {
                     myself.isTweening = false;
                     clearInterval(afterGravity);
-                    let deadOrNot = myself.#isDeadGame(allEntries);
+                    let deadOrNot = myself.isDeadGame(allEntries);
                     if (deadOrNot) { // when no tile can be eliminated
-                        myself.#afterDeadend(myself.tileGroup_decreasing);
+                        myself.afterDeadend(myself.tileGroup_decreasing);
                     }
                 }
             }, 50);
             return;
         }
         // sort empty xpos, because we want to start shifting from the right-most empty column
-        emptyColsXPos.sort(SceneGame.#comparatorNumberSort);
+        emptyColsXPos.sort(SceneGame.comparatorNumberSort);
         // get the first right-most col needs to be shifted
         let right_ind = this.initial_x_pos.indexOf(emptyColsXPos[emptyColsXPos.length - 1]) + 1;
         // if it is beyond the last col
         if (right_ind >= this.initial_x_pos.length) {
             this.initial_x_pos.splice(this.initial_x_pos.length - 1, 1);
             emptyColsXPos.splice(-1);
-            this.#shiftAllEmptyCol(allEntries, emptyColsXPos);
+            this.shiftAllEmptyCol(allEntries, emptyColsXPos);
             return;
         }
         // get right-most xpos needs to be shifted
         let right_xpos = this.initial_x_pos[right_ind];
         // extract all cells at xpos
-        let right_col = this.#getOneCol(allEntries, right_xpos);
+        let right_col = this.getOneCol(allEntries, right_xpos);
         // shift cols one at a time
         this.tweens.add({
             targets: right_col,
@@ -833,9 +833,9 @@ export default class SceneGame extends Phaser.Scene {
                 // add next x pos as candidates
                 emptyColsXPos.push(nextX);
                 // update original entry array arrangement
-                SceneGame.#shiftTwoColumns(nextInd - 1, nextInd, myself.blueprint.length,
+                SceneGame.shiftTwoColumns(nextInd - 1, nextInd, myself.blueprint.length,
                     myself.blueprint[0].length, allEntries);
-                myself.#shiftAllEmptyCol(allEntries, emptyColsXPos);
+                myself.shiftAllEmptyCol(allEntries, emptyColsXPos);
             }
         });
     }
@@ -849,7 +849,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param entries - the 1D array
      * @returns {[*]} - switched 1D array
      */
-    static #shiftTwoColumns(colIndexOne, colIndexTwo, rowCount, colCount, entries) {
+    static shiftTwoColumns(colIndexOne, colIndexTwo, rowCount, colCount, entries) {
         for (let i = 0; i < rowCount; i++) {
             let temp = entries[i * colCount + colIndexOne];
             entries[i * colCount + colIndexOne] = entries[i * colCount + colIndexTwo];
@@ -863,13 +863,13 @@ export default class SceneGame extends Phaser.Scene {
      * @param xMap - original map
      * @returns {Map} - resulting shifted map
      */
-    #shiftMapLeft(xMap) {
+    shiftMapLeft(xMap) {
         for (let startKey of this.tilesXPosCount.keys()) {
             if (this.tilesXPosCount.get(startKey) === 0) {
                 let foundXPos = false;
                 let previous_key = null;
                 let keys = Array.from(xMap.keys());
-                keys.sort(SceneGame.#comparatorNumberSort);
+                keys.sort(SceneGame.comparatorNumberSort);
                 // find key position in map, and shift left from there
                 for (let eachKey of keys) {
                     let cur_differences = Math.abs(eachKey - startKey);
@@ -884,7 +884,7 @@ export default class SceneGame extends Phaser.Scene {
                     previous_key = eachKey;
                 }
                 xMap.delete(previous_key);
-                return this.#shiftMapLeft(xMap)
+                return this.shiftMapLeft(xMap)
             }
         }
 
@@ -901,7 +901,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param col_count{int} - total number of columns of tile map
      * @returns {int} - index of tile in tile group array
      */
-    static #getIndexPosition(tile, left_wall_rightX, bottom_platform_topY, tile_width, col_count) {
+    static getIndexPosition(tile, left_wall_rightX, bottom_platform_topY, tile_width, col_count) {
         // find which row the tile is at, bottom row is row 0
         let tile_topY = tile.getTopCenter().y;
         tile_topY = tile_topY - tile_width / 2; // offset to avoid calculation error
@@ -922,9 +922,9 @@ export default class SceneGame extends Phaser.Scene {
      * @param initial_x_pos - object contains all x positions
      * @returns {(number|string)[]} - index and key in object
      */
-    static #getXposKey(trueXpos, initial_x_pos) {
+    static getXposKey(trueXpos, initial_x_pos) {
         let xPos_arr = Array.from(initial_x_pos);
-        xPos_arr.sort(SceneGame.#comparatorNumberSort);
+        xPos_arr.sort(SceneGame.comparatorNumberSort);
         let index = -1;
         for (let xPos of xPos_arr) {
             index += 1;
@@ -942,7 +942,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param val
      * @returns {number}
      */
-    static #getInsertIndex(arr, val) {
+    static getInsertIndex(arr, val) {
         let low = 0, high = arr.length;
         while (low < high) {
             let mid = (low + high) >>> 1;
@@ -955,12 +955,12 @@ export default class SceneGame extends Phaser.Scene {
         return low;
     }
 
-    static #getAllNeighbors(tile, myIndex, initial_x_pos, colCount, allEntries) {
+    static getAllNeighbors(tile, myIndex, initial_x_pos, colCount, allEntries) {
         let error = 0.00001; // tolerance small error offset
         let result = new Set();
         let queue_tile = [tile]; // queue tile of successive neighbors
         let queue_index = [myIndex]; // queue index of corresponding tile
-        initial_x_pos.sort(SceneGame.#comparatorNumberSort);
+        initial_x_pos.sort(SceneGame.comparatorNumberSort);
 
         while (queue_tile.length !== 0) {
             let current_tile = queue_tile.shift();
@@ -1020,10 +1020,10 @@ export default class SceneGame extends Phaser.Scene {
      * @param entries
      * @returns {boolean}
      */
-    static #getMinimumNeighbor(tile, myIndex, tilesXPosCount, colCount, entries) {
+    static getMinimumNeighbor(tile, myIndex, tilesXPosCount, colCount, entries) {
         let error = 0.00001; // tolerance small error offset
         let xPositions = Array.from(tilesXPosCount.keys());
-        xPositions.sort(SceneGame.#comparatorNumberSort);
+        xPositions.sort(SceneGame.comparatorNumberSort);
         // check left neighbor
         let distance_to_leftCol = Math.abs(tile.x - parseFloat(xPositions[0]));
         if (distance_to_leftCol > error && // not left-most col
@@ -1056,10 +1056,10 @@ export default class SceneGame extends Phaser.Scene {
      * @param xpos
      * @returns {*[]}
      */
-    #getOneCol(allTiles, xpos) {
+    getOneCol(allTiles, xpos) {
         let res = [];
         // find col index
-        let i = SceneGame.#getXposKey(xpos, this.initial_x_pos)[0];
+        let i = SceneGame.getXposKey(xpos, this.initial_x_pos)[0];
         // extract a single col
         for (let k = 0; k < this.blueprint.length; k++) {
             let cur_tile = allTiles[i + k * this.blueprint[0].length];
@@ -1075,7 +1075,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param arr
      * @returns {*[]}
      */
-    static #getDeleteOrder(toInsert, position, arr) {
+    static getDeleteOrder(toInsert, position, arr) {
         let res = [toInsert];
         let left = position - 1;
         let right = position;
@@ -1125,21 +1125,21 @@ export default class SceneGame extends Phaser.Scene {
      * determine whether to change characters
      * @param totalNeighb - current neighbors with the same type of tiles
      */
-    #changeCharacterFilter(totalNeighb) {
+    changeCharacterFilter(totalNeighb) {
         if (totalNeighb > _globalSettings.switchCharTrigger - 1) {
             if (this.passedThirdPoint || this.colli_tileGroup.maxSize - this.eliminatedTileCount > this.colli_tileGroup.maxSize / 3) {
-                this.#changeHappyFace();
+                this.changeHappyFace();
             }
         }
         if (!this.passedThirdPoint && this.colli_tileGroup.maxSize - this.eliminatedTileCount <= this.colli_tileGroup.maxSize / 3) {
-            this.#changeHurryFace();
+            this.changeHurryFace();
         }
     }
 
     /**
      * change character face
      */
-    #changeSadFace() {
+    changeSadFace() {
         // hide all faces and dialogues
         for (let val of this.ingame_face_group.children.entries) {
             val.visible = false;
@@ -1162,7 +1162,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * change character face
      */
-    #changeHurryFace() {
+    changeHurryFace() {
         this.passedThirdPoint = true;
         // hide all faces
         for (let val of this.ingame_face_group.children.entries) {
@@ -1185,7 +1185,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * change character face
      */
-    #changeHappyFace() {
+    changeHappyFace() {
         // hide all faces
 
         for (let val of this.ingame_face_group.children.entries) {
@@ -1224,7 +1224,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param b
      * @returns {number}
      */
-    static #comparatorNumberSort (a, b) {
+    static comparatorNumberSort (a, b) {
         return a - b;
     }
 
@@ -1233,7 +1233,7 @@ export default class SceneGame extends Phaser.Scene {
      * @param s1
      * @param s2
      */
-    static #comparatorArcadeCollider(s1, s2) {
+    static comparatorArcadeCollider(s1, s2) {
         let b1 = s1.body;
         let b2 = s2.body;
         if (b1.y > b2.y) {
