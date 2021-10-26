@@ -4,7 +4,7 @@
 
 
 
-<img src="https://img.shields.io/badge/PRs-welcome-F17C67" alt="badge" style="zoom:100%;"/>
+<img src="https://img.shields.io/badge/PRs-welcome-F66FB2" alt="badge" style="zoom:100%;"/>
 
 
 
