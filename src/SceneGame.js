@@ -64,7 +64,7 @@ export default class SceneGame extends Phaser.Scene {
         this.blueprint.then((result)=>{
             this.blueprint = result;
             //initialise other assets
-            this.#initialiseOthers();
+            this.initialiseOthers();
             //initialise walls
             this.#initialiseWalls();
             //initialise physics arcade and tile parameters
@@ -92,7 +92,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * create side assets have no physics effects
      */
-    #initialiseOthers() {
+    initialiseOthers() {
         // background
         this.builder.buildPackTextureAssets({
             x:0,y:0,
