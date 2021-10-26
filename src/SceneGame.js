@@ -66,15 +66,15 @@ export default class SceneGame extends Phaser.Scene {
             //initialise other assets
             this.initialiseOthers();
             //initialise walls
-            this.#initialiseWalls();
+            this.initialiseWalls();
             //initialise physics arcade and tile parameters
-            this.#initialiseArcadePhysics();
+            this.initialiseArcadePhysics();
             //generate and drop tiles
             setTimeout(() => {
-                let promise_dropped = this.#initialiseDropTiles();
+                let promise_dropped = this.initialiseDropTiles();
                 promise_dropped.then(()=>{
                     // tile click events
-                    this.#addTileClickEvent();
+                    this.addTileClickEvent();
                 });
             }, 1700);
         });
@@ -253,7 +253,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * create boundary walls of tiles
      */
-    #initialiseWalls() {
+    initialiseWalls() {
         //bottom invisible platform
         this.platform = this.builder.buildArcadeSprite({
             x:this.game.scale.gameSize.width * 0.5,y:this.game.scale.gameSize.height * 0.969,filename:'platform.png',
@@ -276,7 +276,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * initialise physics
      */
-    #initialiseArcadePhysics() {
+    initialiseArcadePhysics() {
         //arcade bound
         this.physics.world.setBounds(0, 0, this.game.scale.gameSize.width, this.game.scale.gameSize.height * 0.969 - this.platform.displayHeight / 2);
 
@@ -304,7 +304,7 @@ export default class SceneGame extends Phaser.Scene {
         this.physics.add.collider(this.colli_wallsGroup, this.colli_tileGroup, SceneGame.#comparatorArcadeCollider);
     }
 
-     #initialiseDropTiles() {
+     initialiseDropTiles() {
         let myself = this;
         return new Promise((resolve, reject) => {
             // from bottom row of blueprint upwards, generate tiles and drop animations
@@ -354,7 +354,7 @@ export default class SceneGame extends Phaser.Scene {
     /**
      * initialise click event on tiles
      */
-    #addTileClickEvent() {
+    addTileClickEvent() {
         let myself = this;
         let allDroppedCheck = setInterval(() => {
             if (SceneGame.#isAllStopped(myself.tileGroup_decreasing)) {
